@@ -1,0 +1,16 @@
+# IDE mumbo jumbo
+/.idea
+*.iml
+target/
+.classpath
+.project
+.settings
+*~
+
+# Java artifacts
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/22153/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook
+END
+JpaAddressbookApplication.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/!svn/ver/22118/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/JpaAddressbookApplication.java
+END
+AddressBookMainView.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/!svn/ver/22153/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/AddressBookMainView.java
+END
+DepartmentSelector.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/!svn/ver/22118/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/DepartmentSelector.java
+END
+DemoDataGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/!svn/ver/21856/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/DemoDataGenerator.java
+END
+HierarchicalDepartmentContainer.java
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/!svn/ver/22118/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/HierarchicalDepartmentContainer.java
+END
+PersonEditor.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/!svn/ver/22093/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/src/main/java/com/vaadin/demo/jpaaddressbook/PersonEditor.java
+END
