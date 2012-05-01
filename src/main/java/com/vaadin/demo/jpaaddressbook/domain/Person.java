@@ -5,10 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name="person", uniqueConstraints={ @UniqueConstraint(columnNames={"FIRSTNAME", "LASTNAME", "PHONENUMBER"})})
 public class Person {
 
     @Id
@@ -16,14 +19,17 @@ public class Person {
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 24)
+    @Size(min = 1, max = 255)
     private String firstName;
-    @Size(min = 2, max = 24)
+    @NotNull
+    @Size(min = 2, max = 255)
     private String lastName;
+    @NotNull
+    private String phoneNumber;
     private String street;
     private String city;
     private String zipCode;
-    private String phoneNumber;
+    
     @NotNull
     @ManyToOne
     private Department department;
