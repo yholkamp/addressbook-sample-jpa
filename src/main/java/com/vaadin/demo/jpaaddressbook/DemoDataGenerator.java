@@ -54,9 +54,9 @@ public class DemoDataGenerator {
 
 		em.getTransaction().begin();
 		Random r = new Random(0);
-		for (String o : officeNames) {
-			Department geoGroup = new Department();
-			geoGroup.setName(o);
+//		for (String o : officeNames) {
+//			Department geoGroup = new Department();
+//			geoGroup.setName(o);
 			for (String g : groupsNames) {
 				Department group = new Department();
 				group.setName(g);
@@ -80,12 +80,12 @@ public class DemoDataGenerator {
 					gPersons.add(p);
 					em.persist(p);
 				}
-				group.setParent(geoGroup);
+//				group.setParent(geoGroup);
 				group.setPersons(gPersons);
 				em.persist(group);
 			}
-			em.persist(geoGroup);
-		}
+//			em.persist(geoGroup);
+//		}
 
 		em.getTransaction().commit();
 	}

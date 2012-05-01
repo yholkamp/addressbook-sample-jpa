@@ -109,8 +109,7 @@ public class DepartmentSelector extends CustomField {
 
     private void setDepartment(Object newValue) {
         Department value = (Department) newValue;
-        geographicalDepartment.setValue(value != null ? value.getParent()
-                .getId() : null);
+        //geographicalDepartment.setValue(value != null ? value.getId() : null);
         department.setValue(value != null ? value.getId() : null);
     }
 

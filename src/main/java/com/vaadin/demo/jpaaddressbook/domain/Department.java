@@ -6,9 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 @Entity
 public class Department {
@@ -21,12 +19,6 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     private Set<Person> persons;
-
-    @Transient
-    private Boolean superDepartment;
-
-    @ManyToOne
-    private Department parent;
 
     public Long getId() {
         return id;
@@ -52,31 +44,8 @@ public class Department {
         this.persons = persons;
     }
 
-    public Department getParent() {
-        return parent;
-    }
-
-    public void setParent(Department parent) {
-        this.parent = parent;
-    }
-
-    public boolean isSuperDepartment() {
-        if (superDepartment == null) {
-            superDepartment = getPersons().size() == 0;
-        }
-        return superDepartment;
-    }
-
-    @Transient
-    public String getHierarchicalName() {
-        if (parent != null) {
-            return parent.toString() + " : " + name;
-        }
-        return name;
-    }
-
     @Override
     public String toString() {
-        return getHierarchicalName();
+        return this.getName();
     }
 }

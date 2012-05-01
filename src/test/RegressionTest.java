@@ -20,7 +20,7 @@ import com.vaadin.demo.jpaaddressbook.domain.*;
 public class RegressionTest {
 
 	private Department depIn = new Department();
-	private Set<Person> persons = new HashSet();
+	private Set<Person> persons = new HashSet<Person>();
 	private Person personIn = new Person();
 	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("addressbook");
 	private EntityManager em = emf.createEntityManager();

@@ -16,7 +16,7 @@ public class DepartmentTest {
 	Person person2 = new Person();
 	Person person3 = new Person();
 	Person person4 = new Person();
-	Set<Person> persons = new HashSet();
+	Set<Person> persons = new HashSet<Person>();
 		
 	Department department = new Department();
 	Department department2 = new Department();
@@ -40,37 +40,5 @@ public class DepartmentTest {
 		persons.add(person4);
 		department.setPersons(persons);
 		assertEquals(department.getPersons(),persons);
-	}
-
-	@Test
-	public void testParent() {
-		//multiple departments can have same parent
-		department.setParent(parentDepartment);
-		department2.setParent(parentDepartment);
-		assertEquals(department.getParent(), department2.getParent());
-	}
-
-
-	@Test
-	public void testIsSuperDepartment() {
-		//if superDepartments is not initialised and size of persons is 0, set superDepartment true. else false
-		persons.add(person);
-		persons.add(person2);
-		persons.add(person3);
-		persons.add(person4);
-		department.setPersons(persons);
-		assertFalse(department.isSuperDepartment());
-
-		//empty list && not initialized is true
-		persons.clear();
-		department2.setPersons(persons);
-		assertTrue(department2.isSuperDepartment());
-	}
-
-	@Test
-	public void testGetHierarchicalName() {
-		//same hierachical names
-		department.setParent(parentDepartment);
-		assertEquals(parentDepartment.toString() + " : " + department.getName(), department.getHierarchicalName());
-	}
+	}	
 }

@@ -18,8 +18,7 @@ public class HierarchicalDepartmentContainer extends JPAContainer<Department> {
 
     @Override
     public boolean areChildrenAllowed(Object itemId) {
-        return super.areChildrenAllowed(itemId)
-                && getItem(itemId).getEntity().isSuperDepartment();
+        return super.areChildrenAllowed(itemId);
     }
 
 }

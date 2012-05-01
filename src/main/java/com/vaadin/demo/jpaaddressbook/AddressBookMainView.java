@@ -184,14 +184,14 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
         persons.setApplyFiltersImmediately(false);
         persons.removeAllContainerFilters();
         if (departmentFilter != null) {
-            // two level hierarchy at max in our demo
-            if (departmentFilter.getParent() == null) {
-                persons.addContainerFilter(new Equal("department.parent",
-                        departmentFilter));
-            } else {
+//            // two level hierarchy at max in our demo
+//            if (departmentFilter.getParent() == null) {
+//                persons.addContainerFilter(new Equal("department.parent",
+//                        departmentFilter));
+//            } else {
                 persons.addContainerFilter(new Equal("department",
                         departmentFilter));
-            }
+//            }
         }
         if (textFilter != null && !textFilter.equals("")) {
             Or or = new Or(new Like("firstName", textFilter + "%", false),
