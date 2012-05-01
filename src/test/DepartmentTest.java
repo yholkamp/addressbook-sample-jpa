@@ -3,17 +3,6 @@ import static org.junit.Assert.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,12 +25,10 @@ public class DepartmentTest {
 	@Before
 	public void setup(){
 		//set all persons to a valid state
-		String firstName = "first";
-		String lastName = "last";
-		person.setFirstName(firstName);person.setLastName(lastName);person.setDepartment(department);
-		person2.setFirstName(firstName);person2.setLastName(lastName);person2.setDepartment(department);
-		person3.setFirstName(firstName);person3.setLastName(lastName);person3.setDepartment(department);
-		person4.setFirstName(firstName);person4.setLastName(lastName);person4.setDepartment(department);
+		person.setFirstName("first");person.setLastName("last");person.setDepartment(department);person.setPhoneNumber("0560");
+		person2.setFirstName("first2");person2.setLastName("last2");person2.setDepartment(department);person.setPhoneNumber("05602");
+		person3.setFirstName("first3");person3.setLastName("last3");person3.setDepartment(department);person.setPhoneNumber("05603");
+		person4.setFirstName("first4");person4.setLastName("last4");person4.setDepartment(department);person.setPhoneNumber("05604");
 	}
 	
 	@Test
@@ -73,7 +60,8 @@ public class DepartmentTest {
 		persons.add(person4);
 		department.setPersons(persons);
 		assertFalse(department.isSuperDepartment());
-		//empty list && not initialised is true
+
+		//empty list && not initialized is true
 		persons.clear();
 		department2.setPersons(persons);
 		assertTrue(department2.isSuperDepartment());

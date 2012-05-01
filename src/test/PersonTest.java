@@ -17,10 +17,12 @@ import com.vaadin.demo.jpaaddressbook.domain.Person;
 
 public class PersonTest {		
 	Person person = new Person();
-	// name is shorter than 2 characters
-	String nameFalseShort = "f";
-	//name is longer than 24 characters
-	String nameFalseLong = "falsefalsefalsefalsefalsefalse";
+	StringBuffer sb = new StringBuffer();
+	// name is shorter than 1 character
+	String nameFalseShort = "";
+	String nameFalseShorter = "f";
+	//name is longer than 255 characters
+	String nameFalseLong;
 	//name is valid
 	String nameTrue = "true";
 	//name is null;
@@ -30,6 +32,11 @@ public class PersonTest {
 	Department department = new Department();
 	//department is null
 	Department departmentNull;
+
+	//valid phonenumber
+	String phoneNumber = "064834";
+	//null number
+	String phoneNumberNull;
 
 	//validator init
 	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -44,6 +51,17 @@ public class PersonTest {
 		assertEquals(person.getLastName(), nameTrue);
 		person.setDepartment(department);
 		assertEquals(person.getDepartment(), department);
+
+		person.setPhoneNumber(phoneNumber);
+		assertEquals(person.getPhoneNumber(), phoneNumber);
+		//generate long string
+		for(int x = 0; x < 51; x++){
+			sb.append("Fives");
+		}
+		//make it length 256 length
+		sb.append("!");
+		nameFalseLong = sb.toString();
+
 	}
 
 	@Test
@@ -62,7 +80,7 @@ public class PersonTest {
 		//set is true
 		person.setFirstName(nameFalseLong);
 		assertEquals(person.getFirstName(), nameFalseLong);
-		//validation is false, because firstName is longer than size 24
+		//validation is false, because firstName is longer than size 255
 		constraintViolations = validator.validate(person);
 		assertEquals(constraintViolations.size(), 1);
 		
@@ -80,26 +98,27 @@ public class PersonTest {
 		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
 		assertEquals(constraintViolations.size(), 0);
 		
-		//set is true
-		person.setLastName(nameFalseShort);
-		assertEquals(person.getLastName(), nameFalseShort);
+		//1 violation, short name
+		person.setLastName(nameFalseShorter);
+		assertEquals(person.getLastName(), nameFalseShorter);
+
 		//validation is false because firstName is shorter than size 2
 		constraintViolations = validator.validate(person);
 		assertEquals(constraintViolations.size(), 1);
 		
-		//set is true
+		//1 violation long name
 		person.setLastName(nameFalseLong);
 		assertEquals(person.getLastName(), nameFalseLong);
-		//validation is false, because lastName is longer than size 24
+		//validation is false, because lastName is longer than size 255
 		constraintViolations = validator.validate(person);
 		assertEquals(constraintViolations.size(), 1);
 		
-		//set is true
+		//1 violation null
 		person.setLastName(nameFalseNull);
 		assertEquals(person.getLastName(), null);
-		//validation is true, because lastName can be null
+		//validation is true, because lastName cant be null
 		constraintViolations = validator.validate(person);
-		assertEquals(constraintViolations.size(), 0);
+		assertEquals(constraintViolations.size(), 1);
 	}
 
 	@Test
@@ -121,5 +140,18 @@ public class PersonTest {
 		//validation is false, because null is not valid
 		constraintViolations = validator.validate(person);
 		assertEquals(constraintViolations.size(), 1);		
+	}
+	
+	@Test
+	public void testPhoneNumber(){
+		//validation is true, because all constraints are legal
+		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+		assertEquals(constraintViolations.size(), 0);	
+		
+		//phonenumber may not be null
+		person.setPhoneNumber(phoneNumberNull);
+		//validation is false, because null is not valid
+		constraintViolations = validator.validate(person);
+		assertEquals(constraintViolations.size(), 1);	
 	}
 }
