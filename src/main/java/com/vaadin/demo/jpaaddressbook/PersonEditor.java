@@ -5,7 +5,10 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import com.vaadin.addon.beanvalidation.BeanValidationForm;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Item;
+import com.vaadin.demo.jpaaddressbook.domain.Department;
 import com.vaadin.demo.jpaaddressbook.domain.Person;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -35,7 +38,6 @@ public class PersonEditor extends Window implements Button.ClickListener,
         editorForm.setItemDataSource(personItem, Arrays.asList("firstName",
                 "lastName", "phoneNumber", "street", "city", "zipCode",
                 "department"));
-
         saveButton = new Button("Save", this);
         cancelButton = new Button("Cancel", this);
 
@@ -63,7 +65,12 @@ public class PersonEditor extends Window implements Button.ClickListener,
     @Override
     public void buttonClick(ClickEvent event) {
         if (event.getButton() == saveButton) {
-            editorForm.commit();
+            
+        	
+        	System.out.println(editorForm.getItemProperty("department").getValue());
+        	
+        	
+        	editorForm.commit();
             fireEvent(new EditorSavedEvent(this, personItem));
         } else if (event.getButton() == cancelButton) {
             editorForm.discard();
@@ -80,7 +87,16 @@ public class PersonEditor extends Window implements Button.ClickListener,
     @Override
     public Field createField(Item item, Object propertyId, Component uiContext) {
         if ("department".equals(propertyId)) {
-            return new DepartmentSelector();
+        	personItem.getItemProperty("department");
+        	
+//          return new DepartmentSelector();
+//			Person value = (Person) item;
+        	System.out.println(personItem.getItemProperty("department"));
+        	System.out.println(item.getItemProperty("department"));
+//        	personItem =
+        			
+//    		geographicalDepartment.setValue(value != null ? value.getId() : null);
+//		    personItem. department.setValue(value != null ? value.getId() : null);
         }
 
         Field field = DefaultFieldFactory.get().createField(item, propertyId,

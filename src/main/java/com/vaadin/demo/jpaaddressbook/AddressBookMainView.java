@@ -47,10 +47,12 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
     private String textFilter;
 
     public AddressBookMainView() {
-        departments = new HierarchicalDepartmentContainer();
-        persons = JPAContainerFactory.make(Person.class,
+        //beide weg, run. 1 van beide kapot.
+    	//departments = new HierarchicalDepartmentContainer();
+    	//departments = JPAContainerFactory.make(Department.class,JpaAddressbookApplication.PERSISTENCE_UNIT);
+    	persons = JPAContainerFactory.make(Person.class,
                 JpaAddressbookApplication.PERSISTENCE_UNIT);
-        buildTree();
+        //buildTree();
         buildMainArea();
 
         setSplitPosition(30);
@@ -86,8 +88,7 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
             }
         });
 
-        personTable.setVisibleColumns(new Object[] { "firstName", "lastName",
-                "department", "phoneNumber", "street", "city", "zipCode" });
+        personTable.setVisibleColumns(new Object[] { "firstName", "lastName", "department", "phoneNumber", "street", "city", "zipCode" });
 
         HorizontalLayout toolbar = new HorizontalLayout();
         newButton = new Button("Add");
@@ -183,16 +184,16 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
     private void updateFilters() {
         persons.setApplyFiltersImmediately(false);
         persons.removeAllContainerFilters();
-        if (departmentFilter != null) {
+//        if (departmentFilter != null) {
 //            // two level hierarchy at max in our demo
 //            if (departmentFilter.getParent() == null) {
 //                persons.addContainerFilter(new Equal("department.parent",
 //                        departmentFilter));
 //            } else {
-                persons.addContainerFilter(new Equal("department",
-                        departmentFilter));
+//                persons.addContainerFilter(new Equal("department",
+//                        departmentFilter));
 //            }
-        }
+//        }
         if (textFilter != null && !textFilter.equals("")) {
             Or or = new Or(new Like("firstName", textFilter + "%", false),
                     new Like("lastName", textFilter + "%", false));

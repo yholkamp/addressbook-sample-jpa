@@ -16,43 +16,43 @@ import com.vaadin.ui.CssLayout;
  * A custom field that allows selection of a department.
  */
 public class DepartmentSelector extends CustomField {
-    private ComboBox geographicalDepartment = new ComboBox();
+    //private ComboBox geographicalDepartment = new ComboBox();
     private ComboBox department = new ComboBox();
 
     private JPAContainer<Department> container;
-    private JPAContainer<Department> geoContainer;
+    //private JPAContainer<Department> geoContainer;
 
     public DepartmentSelector() {
         container = JPAContainerFactory.make(Department.class,
                 JpaAddressbookApplication.PERSISTENCE_UNIT);
-        geoContainer = JPAContainerFactory.make(Department.class,
-                JpaAddressbookApplication.PERSISTENCE_UNIT);
+//        geoContainer = JPAContainerFactory.make(Department.class,
+//                JpaAddressbookApplication.PERSISTENCE_UNIT);
         setCaption("Department");
         // Only list "roots" which are in our example geographical super
         // departments
-        geoContainer.addContainerFilter(new IsNull("parent"));
-        geographicalDepartment.setContainerDataSource(geoContainer);
-        geographicalDepartment.setItemCaptionPropertyId("name");
-        geographicalDepartment.setImmediate(true);
+//        geoContainer.addContainerFilter(new IsNull("parent"));
+//        geographicalDepartment.setContainerDataSource(geoContainer);
+//        geographicalDepartment.setItemCaptionPropertyId("name");
+//        geographicalDepartment.setImmediate(true);
 
         container.setApplyFiltersImmediately(false);
         filterDepartments(null);
         department.setContainerDataSource(container);
         department.setItemCaptionPropertyId("name");
 
-        geographicalDepartment.addListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(
-                    com.vaadin.data.Property.ValueChangeEvent event) {
-                /*
-                 * Modify filtering of the department combobox
-                 */
-                EntityItem<Department> item = geoContainer
-                        .getItem(geographicalDepartment.getValue());
-                Department entity = item.getEntity();
-                filterDepartments(entity);
-            }
-        });
+//        geographicalDepartment.addListener(new Property.ValueChangeListener() {
+//            @Override
+//            public void valueChange(
+//                    com.vaadin.data.Property.ValueChangeEvent event) {
+//                /*
+//                 * Modify filtering of the department combobox
+//                 */
+//                EntityItem<Department> item = geoContainer
+//                        .getItem(geographicalDepartment.getValue());
+//                Department entity = item.getEntity();
+//                filterDepartments(entity);
+//            }
+//        });
         department.addListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(
@@ -62,16 +62,19 @@ public class DepartmentSelector extends CustomField {
                  */
                 if (department.getValue() == null) {
                     setValue(null, false);
+                    System.out.println("VALUE NULL");
                 } else {
+                	System.out.println(department.getValue());
                     Department entity = container
                             .getItem(department.getValue()).getEntity();
                     setValue(entity, false);
+                    System.out.println("VALUE NON-NULL");
                 }
             }
         });
 
         CssLayout cssLayout = new CssLayout();
-        cssLayout.addComponent(geographicalDepartment);
+//        cssLayout.addComponent(geographicalDepartment);
         cssLayout.addComponent(department);
         setCompositionRoot(cssLayout);
     }
@@ -82,17 +85,17 @@ public class DepartmentSelector extends CustomField {
      * @param currentGeoDepartment
      */
     private void filterDepartments(Department currentGeoDepartment) {
-        if (currentGeoDepartment == null) {
-            department.setValue(null);
-            department.setEnabled(false);
-        } else {
+//        if (currentGeoDepartment == null) {
+//            department.setValue(null);
+//            department.setEnabled(false);
+//        } else {
             container.removeAllContainerFilters();
-            container.addContainerFilter(new Equal("parent",
-                    currentGeoDepartment));
-            container.applyFilters();
+//            container.addContainerFilter(new Equal("parent",
+//                    currentGeoDepartment));
+//            container.applyFilters();
             department.setValue(null);
             department.setEnabled(true);
-        }
+//        }
     }
 
     @Override
