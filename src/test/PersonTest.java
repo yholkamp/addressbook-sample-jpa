@@ -12,7 +12,6 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.vaadin.demo.jpaaddressbook.domain.Department;
 import com.vaadin.demo.jpaaddressbook.domain.Person;
 
 public class PersonTest {		
@@ -29,9 +28,9 @@ public class PersonTest {
 	String nameFalseNull;
 	
 	//valid department
-	Department department = new Department();
+	String department = "department";
 	//department is null
-	Department departmentNull;
+	String departmentNull;
 
 	//valid phonenumber
 	String phoneNumber = "064834";

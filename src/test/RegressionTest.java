@@ -3,9 +3,6 @@
 
 import static org.junit.Assert.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -19,8 +16,7 @@ import com.vaadin.demo.jpaaddressbook.domain.*;
 
 public class RegressionTest {
 
-	private Department depIn = new Department();
-	private Set<Person> persons = new HashSet<Person>();
+	private String depIn;
 	private Person personIn = new Person();
 	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("addressbook");
 	private EntityManager em = emf.createEntityManager();
@@ -31,7 +27,7 @@ public class RegressionTest {
 	public void setup(){
 		//set all values for department and person
 		//name for department
-		String depName = "depName";
+		String depIn = "depName";
 		//values for valid person
 		String firstName = "FirstName";
 		String lastName = "LastName";
@@ -48,9 +44,6 @@ public class RegressionTest {
 		personIn.setStreet(street);
 		personIn.setZipCode(zipCode);
 		
-		depIn.setName(depName);
-		persons.add(personIn);		
-		depIn.setPersons(persons);
 		personIn.setDepartment(depIn);
 		//generate long string
 		for(int x = 0; x < 51; x++){
@@ -67,18 +60,15 @@ public class RegressionTest {
 		//data in:
 		em.clear();
 		em.getTransaction().begin();
-		em.persist(depIn);
 		em.persist(personIn);
 		em.getTransaction().commit();
 
 		//data out of the database
 		Person personOut = em.find(Person.class, personIn.getId());
-		Department depOut = em.find(Department.class, depIn.getId());
-		
+				
 		//data in == data out
 		assertEquals(personIn,personOut);
-		assertEquals(depOut, depIn);
-		
+				
 		//clear database
 		em.clear();
 		em.getTransaction().begin();
@@ -97,7 +87,6 @@ public class RegressionTest {
 		boolean gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		} catch (ConstraintViolationException e){
@@ -114,7 +103,6 @@ public class RegressionTest {
 		gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -132,7 +120,6 @@ public class RegressionTest {
 		gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -155,7 +142,6 @@ public class RegressionTest {
 		boolean gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		} catch (ConstraintViolationException e){
@@ -172,7 +158,6 @@ public class RegressionTest {
 		gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -190,7 +175,6 @@ public class RegressionTest {
 		gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -211,7 +195,6 @@ public class RegressionTest {
 		boolean gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -224,13 +207,11 @@ public class RegressionTest {
 		
 		//Department is Null
 		//invalid data for personIn
-		Department depNull = new Department();
-		personIn.setDepartment(depNull);
+		personIn.setDepartment(null);
 		
 		gotConstraintViolations = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.getTransaction().commit();
 		}
@@ -263,24 +244,21 @@ public class RegressionTest {
 		personDouble.setLastName(lastName);
 		personDouble.setPhoneNumber(phoneNumber);
 				
-		depIn.setName(depName);
-		persons.add(personDouble);		
-		depIn.setPersons(persons);
+		depIn = depName;
 		personDouble.setDepartment(depIn);
 		
-		boolean gotConstraintViolations = false;
+		boolean gotDoubleViolation = false;
 		try{
 			em.getTransaction().begin();
-			em.persist(depIn);
 			em.persist(personIn);
 			em.persist(personDouble);
 			em.getTransaction().commit();
 		}
 		catch (RollbackException e){
 			//em.getTransaction().rollback(); // Actually rollback is already done. none of persons is persisted
-			gotConstraintViolations = true;
+			gotDoubleViolation = true;
 		}
-		assertTrue("Did not get Constraint Violation while persisting person with not unique IDtupple (firstname, lastname, phonenumber) ", gotConstraintViolations);
+		assertTrue("Did not get Constraint Violation while persisting person with not unique IDtupple (firstname, lastname, phonenumber) ", gotDoubleViolation);
 		
 	}
 }

@@ -8,7 +8,9 @@ public class JpaAddressbookApplication extends Application {
     public static final String PERSISTENCE_UNIT = "addressbook";
 
     static {
+    	System.out.println("BEFORE DEMODATAGENERATOR");
         DemoDataGenerator.create();
+        System.out.println("AFTER DEMODATAGENERATOR");
     }
 
     @Override

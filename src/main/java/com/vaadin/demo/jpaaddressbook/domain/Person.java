@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -31,9 +30,8 @@ public class Person {
     private String zipCode;
     
     @NotNull
-    @ManyToOne
-    private Department department;
-
+    private String department;
+    
     public Long getId() {
         return id;
     }
@@ -90,11 +88,11 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
-    public Department getDepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(Department group) {
-        department = group;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

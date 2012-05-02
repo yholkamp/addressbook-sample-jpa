@@ -1,13 +1,10 @@
 package com.vaadin.demo.jpaaddressbook;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-import com.vaadin.demo.jpaaddressbook.domain.Department;
 import com.vaadin.demo.jpaaddressbook.domain.Person;
 
 public class DemoDataGenerator {
@@ -15,8 +12,6 @@ public class DemoDataGenerator {
 	final static String[] groupsNames = { "Corporate Development",
 			"Human Resources", "Legal", "Environment", "Quality Assurance",
 			"Research and Development", "Production", "Sales", "Marketing" };
-	final static String[] officeNames = { "London",
-		"New York", "Tokyo", "Turku"};
 	final static String[] fnames = { "Peter", "Alice", "Joshua", "Mike",
 			"Olivia", "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik",
 			"Rene", "Lisa", "Marge" };
@@ -54,39 +49,29 @@ public class DemoDataGenerator {
 
 		em.getTransaction().begin();
 		Random r = new Random(0);
-//		for (String o : officeNames) {
-//			Department geoGroup = new Department();
-//			geoGroup.setName(o);
-			for (String g : groupsNames) {
-				Department group = new Department();
-				group.setName(g);
-				Set<Person> gPersons = new HashSet<Person>();
-				
-				int amount = r.nextInt(15) + 1;
-				for (int i = 0; i < amount; i++) {
-					Person p = new Person();
-					p.setFirstName(fnames[r.nextInt(fnames.length)]);
-					p.setLastName(lnames[r.nextInt(lnames.length)]);
-					p.setCity(cities[r.nextInt(cities.length)]);
-					p.setPhoneNumber("+358 02 555 " + r.nextInt(10) + r.nextInt(10)
-							+ r.nextInt(10) + r.nextInt(10));
-					int n = r.nextInt(100000);
-					if (n < 10000) {
-						n += 10000;
-					}
-					p.setZipCode("" + n);
-					p.setStreet(streets[r.nextInt(streets.length)]);
-					p.setDepartment(group);
-					gPersons.add(p);
-					em.persist(p);
+		for (String g : groupsNames) {
+			System.out.println("HIER GA IK LANGS: " + g);
+			String group;
+			group = g;
+			
+			int amount = r.nextInt(15) + 1;
+			for (int i = 0; i < amount; i++) {
+				Person p = new Person();
+				p.setFirstName(fnames[r.nextInt(fnames.length)]);
+				p.setLastName(lnames[r.nextInt(lnames.length)]);
+				p.setCity(cities[r.nextInt(cities.length)]);
+				p.setPhoneNumber("+358 02 555 " + r.nextInt(10) + r.nextInt(10)
+						+ r.nextInt(10) + r.nextInt(10));
+				int n = r.nextInt(100000);
+				if (n < 10000) {
+					n += 10000;
 				}
-//				group.setParent(geoGroup);
-				group.setPersons(gPersons);
-				em.persist(group);
+				p.setZipCode("" + n);
+				p.setStreet(streets[r.nextInt(streets.length)]);
+				p.setDepartment(group);
+				em.persist(p);
 			}
-//			em.persist(geoGroup);
-//		}
-
+		}
 		em.getTransaction().commit();
 	}
 

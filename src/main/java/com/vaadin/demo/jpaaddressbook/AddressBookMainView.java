@@ -5,12 +5,10 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.filter.Compare.Equal;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.demo.jpaaddressbook.PersonEditor.EditorSavedEvent;
 import com.vaadin.demo.jpaaddressbook.PersonEditor.EditorSavedListener;
-import com.vaadin.demo.jpaaddressbook.domain.Department;
 import com.vaadin.demo.jpaaddressbook.domain.Person;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -40,19 +38,12 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
     private Button deleteButton;
     private Button editButton;
 
-    private JPAContainer<Department> departments;
     private JPAContainer<Person> persons;
 
-    private Department departmentFilter;
     private String textFilter;
 
     public AddressBookMainView() {
-        //beide weg, run. 1 van beide kapot.
-    	//departments = new HierarchicalDepartmentContainer();
-    	//departments = JPAContainerFactory.make(Department.class,JpaAddressbookApplication.PERSISTENCE_UNIT);
-    	persons = JPAContainerFactory.make(Person.class,
-                JpaAddressbookApplication.PERSISTENCE_UNIT);
-        //buildTree();
+    	persons = JPAContainerFactory.make(Person.class, JpaAddressbookApplication.PERSISTENCE_UNIT);
         buildMainArea();
 
         setSplitPosition(30);
@@ -157,43 +148,9 @@ public class AddressBookMainView extends HorizontalSplitPanel implements
 
     }
 
-    private void buildTree() {
-        groupTree = new Tree(null, departments);
-        groupTree.setItemCaptionPropertyId("name");
-
-        groupTree.setImmediate(true);
-        groupTree.setSelectable(true);
-        groupTree.addListener(new Property.ValueChangeListener() {
-
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                Object id = event.getProperty().getValue();
-                if (id != null) {
-                    Department entity = departments.getItem(id).getEntity();
-                    departmentFilter = entity;
-                } else if (departmentFilter != null) {
-                    departmentFilter = null;
-                }
-                updateFilters();
-            }
-
-        });
-        setFirstComponent(groupTree);
-    }
-
     private void updateFilters() {
         persons.setApplyFiltersImmediately(false);
         persons.removeAllContainerFilters();
-//        if (departmentFilter != null) {
-//            // two level hierarchy at max in our demo
-//            if (departmentFilter.getParent() == null) {
-//                persons.addContainerFilter(new Equal("department.parent",
-//                        departmentFilter));
-//            } else {
-//                persons.addContainerFilter(new Equal("department",
-//                        departmentFilter));
-//            }
-//        }
         if (textFilter != null && !textFilter.equals("")) {
             Or or = new Or(new Like("firstName", textFilter + "%", false),
                     new Like("lastName", textFilter + "%", false));
