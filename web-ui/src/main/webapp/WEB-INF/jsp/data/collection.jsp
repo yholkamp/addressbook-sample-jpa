@@ -64,7 +64,7 @@
     </ul>
 </div>
 <p>Number of pages : <c:out value="${numPages}"/></p>
-<table>
+<table class="table">
     <c:forEach items="${items}" var="item">
         <tr>
             <td>

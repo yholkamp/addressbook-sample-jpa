@@ -14,70 +14,53 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-
-<html>
-<head>
-    <title>Welcome to the axon trader</title>
-</head>
-<body>
 <content tag="title">Welcome</content>
-<content tag="tagline">Have fun playing with the trader</content>
-<content tag="herounit">
+<content tag="tagline">Have fun trying out the address book</content>
+
+<div class="container">
+
+    <!-- Main hero unit for a primary marketing message or call to action -->
     <div class="hero-unit">
-        <h1>The trader</h1>
+        <h1>Address Book</h1>
 
-        <p>Welcome to the proof of concept of Axon Trader. This sample is created to showcase axon capabilities. Next to
-            that we wanted to create a cool app with a nice front-end that we can really use as a showcase.</p>
-
-        <p>If you are logged in, you can go to your dashboard.</p>
-
-        <p><a class="btn primary large" href="${ctx}/dashboard">Dashboard &raquo;</a></p>
+        <p>
+            A simple sample sandbox application utilizing either a standard JPA backend or CQRS/ES with a MongoDB
+            powered backend. Developed as a research and sandbox project, two applications with similar functionality
+            are created and their development time measured.
+        </p>
     </div>
-</content>
 
-<p>There are a few things implemented. You can choose the company to trade stock items for. Before you can
-    use them you need to login.</p>
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="span6">
+            <h2>Open Source</h2>
 
-<div class="row">
-    <div class="span5">
-        <h2>Available Credentials</h2>
-        <table class="zebra-striped">
-            <thead>
-            <tr>
-                <th>User</th>
-                <th>Password</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>buyer1</td>
-                <td>buyer1</td>
-            </tr>
-            <tr>
-                <td>buyer2</td>
-                <td>buyer2</td>
-            </tr>
-            <tr>
-                <td>buyer3</td>
-                <td>buyer3</td>
-            </tr>
-            </tbody>
-        </table>
+            <p>This application and its counterpart have been developed using various open source applications as
+                starting point and are
+                therefore available under a license compatible with the Apache License v2.0.</p>
+
+            <p>
+                <a class="btn" href="https://github.com/nextpulse/addressbook-sample-mongodb">View
+                    MongoDB-version &raquo;</a>
+                &nbsp;
+                <a class="btn" href="https://github.com/nextpulse/addressbook-sample-jpa">View JPA-version &raquo;</a>
+            </p>
+        </div>
+        <div class="span4">
+            <h2>Technologies used</h2>
+
+            <p>
+                Vaadin's <a href="http://dev.vaadin.com/svn/addons/JPAContainer/trunk/jpacontainer-addressbook-demo/">Addressbook
+                Demo</a> and Axon's <a href="https://github.com/AxonFramework/Axon-trader">Trader</a> and
+                <a href="https://github.com/AxonFramework/Addressbook-Sample">Addressbook</a> applications as starting
+                points for both applications. <a href="http://twitter.github.com/bootstrap/index.html">Twitter's
+                Bootstrap</a> for a little style.
+            </p>
+
+            <p>Below the surface the applications are powered by Spring MVC, Axon Framework, MongoDB and/or a wide
+                variety of JPA adapters.</p>
+        </div>
     </div>
-    <div class="span4">
-        <h2>Check the stocks</h2>
 
-        <p>If you have logged in, you can go to the companies</p>
-
-        <p><a class="btn primary" href="${ctx}/company">To the items &raquo;</a></p>
-    </div>
-    <div class="span5">
-        <h2>Administration</h2>
-
-        <p>We have a few options for creating new companies and new users. This can be found in the admin
-            part of the website.</p>
-    </div>
+    <hr>
 </div>
-
-</body>
-</html>

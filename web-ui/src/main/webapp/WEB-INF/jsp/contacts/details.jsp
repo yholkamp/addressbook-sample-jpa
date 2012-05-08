@@ -1,26 +1,17 @@
 <%@include file="../include.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%--
-  ~ Copyright (c) 2010. Axon Framework
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  --%>
 
-<p>Addresses for : <c:out value='${name}'/></p>
+<content tag="title">Contacts</content>
+<content tag="tagline">View contact</content>
+<content tag="breadcrumb">
+    <ul class="breadcrumb">
+        <li><a href="${ctx}/">Home</a> <span class="divider">/</span></li>
+        <li><a href="${ctx}/contacts">Contacts</a> <span class="divider">/</span></li>
+        <li class="active">Details for <c:out value='${contact.firstName} ${contact.lastName}'/></li>
+    </ul>
+</content>
 
-<p><a href="${ctx}/contacts/${identifier}/address/new">Create a new address</a></p>
-
-<table class="hor-minimalist-b">
+<table class="table hor-minimalist-b">
     <thead>
     <tr>
         <th>Type</th>

@@ -16,30 +16,28 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title><decorator:title/></title>
+    <title><decorator:getProperty property="page.title"/></title>
     <meta name="description" content="Website contaning the Axon sample using a trader application">
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     <![endif]-->
-    <link rel="stylesheet" href="${ctx}/style/bootstrap-1.4.0.min.css">
+    <link rel="stylesheet" href="${ctx}/style/bootstrap.css">
     <link rel="stylesheet" href="${ctx}/style/main.css"/>
     <script type="text/javascript" src="${ctx}/js/jquery-1.6.4.min.js"></script>
 
     <decorator:head/>
 </head>
 <body>
-<div class="topbar">
-    <div class="fill">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="${ctx}/">Axon Trader</a>
+            <a class="brand" href="${ctx}/">SimpleAddressbook</a>
             <ul class="nav">
                 <li><a href="${ctx}/">Home</a></li>
                 <li><a href="${ctx}/contacts">Contacts</a></li>
@@ -65,7 +63,7 @@
         </div>
     </div>
 
-    <footer>
+    <footer class="footer">
         <p>&copy; Gridshore 2011</p>
     </footer>
 

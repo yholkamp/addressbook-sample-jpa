@@ -16,33 +16,12 @@
 
 package org.axonframework.samples.trader.webui.contacts;
 
-import java.util.Random;
-
-import org.axonframework.samples.trader.webui.init.DBInit;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import javax.validation.Valid;
 
-import org.axonframework.commandhandling.CommandBus;
-import org.axonframework.domain.StringAggregateIdentifier;
-import org.axonframework.samples.trader.contacts.api.ChangeContactNameCommand;
-import org.axonframework.samples.trader.contacts.api.CreateContactCommand;
-import org.axonframework.samples.trader.contacts.api.RemoveContactCommand;
-import org.axonframework.samples.trader.query.contacts.ContactEntry;
 import org.axonframework.samples.trader.contacts.Contact;
-import org.axonframework.samples.trader.query.contacts.repositories.ContactQueryRepository;
-import org.axonframework.samples.trader.webui.init.DBInit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author Jettro Coenradie
@@ -77,6 +56,7 @@ public class ContactsController {
 		System.out.println("CONTACTSCONTROLLER");
 		// DBInit.createItems();
 
+		try {
 		EntityManager em = Persistence
 				.createEntityManagerFactory("addressbook")
 				.createEntityManager();
@@ -101,6 +81,10 @@ public class ContactsController {
 
 		// this.contactRepository = contactRepository;
 		// this.commandBus = commandBus;
+		
+		} catch (RuntimeException re) {
+			re.printStackTrace();
+		}
 	}
 
 	// @RequestMapping(method = RequestMethod.GET)
