@@ -27,7 +27,7 @@ public class Contact{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long identifier;
 
     @NotNull
     @Size(min = 1, max = 255)
@@ -36,20 +36,20 @@ public class Contact{
     @Size(min = 2, max = 255)
     private String lastName;
     @NotNull
+    @Size(min = 6, max = 14)
     private String phoneNumber;
     private String street;
     private String city;
     private String zipCode;
     
-    @NotNull
     private String department;
     
-    public Long getId() {
-        return id;
+    public Long getIdentifier() {
+        return identifier;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdentifier(Long id) {
+        this.identifier = id;
     }
 
     public String getFirstName() {

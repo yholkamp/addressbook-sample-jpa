@@ -60,16 +60,11 @@ public class DBInit {
 
 	public static void createItems() {
 		
-		System.out.println("CREATE ITEMES!");
-		
 		EntityManager em = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
 		
-		System.out.println("EM CREATED!");
-	
 		em.getTransaction().begin();
 		Random r = new Random(0);
 		for (String g : groupsNames) {
-			System.out.println("HIER GA IK LANGS: " + g);
 			String group;
 			group = g;
 			
@@ -79,7 +74,7 @@ public class DBInit {
 				p.setFirstName(fnames[r.nextInt(fnames.length)]);
 				p.setLastName(lnames[r.nextInt(lnames.length)]);
 				p.setCity(cities[r.nextInt(cities.length)]);
-				p.setPhoneNumber("+358 02 555 " + r.nextInt(10) + r.nextInt(10)
+				p.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10)
 						+ r.nextInt(10) + r.nextInt(10));
 				int n = r.nextInt(100000);
 				if (n < 10000) {
@@ -88,11 +83,7 @@ public class DBInit {
 				p.setZipCode("" + n);
 				p.setStreet(streets[r.nextInt(streets.length)]);
 				p.setDepartment(group);
-				
-				System.out.println("Before PERSIST");
-				em.persist(p);
-				System.out.println("AFTER PERSIST");
-				
+				em.persist(p);				
 			}
 		}
 		em.getTransaction().commit();	

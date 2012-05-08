@@ -31,8 +31,11 @@ public class ContactTest {
 	//department is null
 	String departmentNull;
 
-	//valid phonenumber
-	String phoneNumber = "064834";
+	//invalid phonenumber
+	String phoneNumberShort = "06483";
+	String phoneNumberLong = "123451234512345";
+	//valid phoneNumber
+	String phoneNumber = "061234";
 	//null number
 	String phoneNumberNull;
 
@@ -135,9 +138,9 @@ public class ContactTest {
 		//valid with null
 		contact.setDepartment(departmentNull);
 		assertEquals(contact.getDepartment(), departmentNull);
-		//validation is false, because null is not valid
+		//validation is true, because null is valid
 		constraintViolations = validator.validate(contact);
-		assertEquals(constraintViolations.size(), 1);		
+		assertEquals(constraintViolations.size(), 0);		
 	}
 	
 	@Test
@@ -150,6 +153,18 @@ public class ContactTest {
 		contact.setPhoneNumber(phoneNumberNull);
 		//validation is false, because null is not valid
 		constraintViolations = validator.validate(contact);
-		assertEquals(constraintViolations.size(), 1);	
+		assertEquals(constraintViolations.size(), 1);
+		
+		//phonenumber may not be longer than 14
+		contact.setPhoneNumber(phoneNumberLong);
+		//validation is false, because null is not valid
+		constraintViolations = validator.validate(contact);
+		assertEquals(constraintViolations.size(), 1);
+		
+		//phonenumber may not be shorter than 6
+		contact.setPhoneNumber(phoneNumberShort);
+		//validation is false, because null is not valid
+		constraintViolations = validator.validate(contact);
+		assertEquals(constraintViolations.size(), 1);
 	}
 }
