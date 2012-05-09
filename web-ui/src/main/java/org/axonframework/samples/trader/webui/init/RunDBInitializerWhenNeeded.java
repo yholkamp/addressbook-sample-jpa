@@ -24,11 +24,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 /**
- * <p>Special class used to initialize the database when starting the container. The database is only initialized
- * when the collection "UserEntry" is not yet available.</p>
- * <p>We need to check for the display name of the application context since we by default have two using spring-mvc
- * the way we do.</p>
- *
+ * <p>
+ * Special class used to initialize the database when starting the container. The database is only initialized when the database is empty.
+ * </p>
+ * 
  * @author Jettro Coenradie
  */
 @Component
@@ -38,11 +37,8 @@ public class RunDBInitializerWhenNeeded implements ApplicationListener<ContextRe
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-    	System.out.println("RUNDBWHEN INIT");
-//        DBInit init = event.getApplicationContext().getBean(DBInit.class);
-
         ContactsFactory contactsFactory = new ContactsFactory();
-        if(contactsFactory.isEmpty()){
+        if (contactsFactory.isEmpty()) {
             DBInit.createItems();
             logger.info("The database has been created and refreshed with some data.");
         }
