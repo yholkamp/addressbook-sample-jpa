@@ -16,3 +16,4 @@ rebel.xml
 .project
 .classpath
 *~
+.db
