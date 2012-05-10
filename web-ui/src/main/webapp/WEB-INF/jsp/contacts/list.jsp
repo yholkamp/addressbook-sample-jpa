@@ -13,9 +13,11 @@
 <p class="pull-left"><a href="${ctx}/contacts/new">Create a new contact</a></p>
 
 <form class="form-search pull-right">
-  <input type="text" class="input-medium search-query" placeholder="Search">
-  <button type="submit" class="btn">Search</button>
+  <input type="text" name="searchValue" class="input-medium search-query" placeholder="Search">
+  <!-- <button type="submit" class="btn" >Search</button> -->
+  <a href="${ctx}/contacts/search/">search</a>
 </form>
+
 
 <table class="table table-striped">
     <thead>

@@ -125,11 +125,11 @@ public class ContactsController {
         return "contacts/list";
     }
     
-//    @RequestMapping(method = RequestMethod.GET)
-//    public String list(Model model) {
-//        List<Contact> listContacts = contactsFactory.searchForContacts(String uit searchfield);
-//        logger.debug("Dispatching command with name : {getContacts}");
-//        model.addAttribute("contacts", listContacts);
-//        return "contacts/list";
-//    }
+    @RequestMapping(value = "?searchValue={value}", method = RequestMethod.GET)
+    public String search(String value, Model model) {
+        List<Contact> listSearchContacts = contactsFactory.searchForContacts(value);
+        logger.debug("Dispatching command with name : {searchForContacts}");
+        model.addAttribute("contacts", listSearchContacts);
+        return "contacts/list";
+    }
 }
