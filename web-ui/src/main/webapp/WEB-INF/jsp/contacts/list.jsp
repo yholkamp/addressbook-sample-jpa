@@ -10,7 +10,12 @@
     </ul>
 </content>
 
-<p><a href="${ctx}/contacts/new">Create a new contact</a></p>
+<p class="pull-left"><a href="${ctx}/contacts/new">Create a new contact</a></p>
+
+<form class="form-search pull-right">
+  <input type="text" class="input-medium search-query" placeholder="Search">
+  <button type="submit" class="btn">Search</button>
+</form>
 
 <table class="table table-striped">
     <thead>

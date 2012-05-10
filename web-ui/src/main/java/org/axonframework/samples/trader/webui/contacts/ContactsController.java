@@ -124,4 +124,12 @@ public class ContactsController {
         model.addAttribute("contacts", listContacts);
         return "contacts/list";
     }
+    
+//    @RequestMapping(method = RequestMethod.GET)
+//    public String list(Model model) {
+//        List<Contact> listContacts = contactsFactory.searchForContacts(String uit searchfield);
+//        logger.debug("Dispatching command with name : {getContacts}");
+//        model.addAttribute("contacts", listContacts);
+//        return "contacts/list";
+//    }
 }

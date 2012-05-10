@@ -80,4 +80,8 @@ public class ContactsFactory {
         contactsDatabase.remove(contact);
         contactsDatabase.getTransaction().commit();
     }
+    
+    public List<Contact> searchForContacts(String value) {
+        return listContacts = contactsDatabase.createQuery("SELECT c FROM Contact c WHERE (FIRSTNAME='" + value + "') OR (LASTNAME='" + value + "')").getResultList();
+    }
 }
