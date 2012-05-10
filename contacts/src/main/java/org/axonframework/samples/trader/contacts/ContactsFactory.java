@@ -4,12 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class ContactsFactory {
 
     private EntityManager contactsDatabase;
-
-    private List<Contact> listContacts;
 
     public ContactsFactory() {
         contactsDatabase = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
@@ -49,7 +48,7 @@ public class ContactsFactory {
      * @return listContacts List of all the Contacts that are stored in de database
      */
     public List<Contact> getContacts() {
-        return listContacts = contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList();
+        return contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList();
     }
 
     /**
@@ -81,7 +80,15 @@ public class ContactsFactory {
         contactsDatabase.getTransaction().commit();
     }
     
+    /**
+     * Searches and return the names that contain the (sub)String value
+     * 
+     * @param value is searchValue, looking for firstName or lastName containing this value
+     * @return list of contacts that contain the String value in firstName or lastName
+     */
     public List<Contact> searchForContacts(String value) {
-        return listContacts = contactsDatabase.createQuery("SELECT c FROM Contact c WHERE (FIRSTNAME='" + value + "') OR (LASTNAME='" + value + "')").getResultList();
+        Query jpqlQuery = contactsDatabase.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
+        return jpqlQuery.setParameter("name", "%" + value + "%").getResultList();
+        
     }
 }

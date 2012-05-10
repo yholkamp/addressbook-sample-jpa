@@ -98,4 +98,17 @@ public class ContactsFactoryTest {
         assertFalse(contactsDatabase.contains(contactTest));
         this.deleteAllRecords();
     }
+    
+    @Test
+    public void testSearchForContact() {
+        //firstName
+        cf.addContact(contactTest);
+        List<Contact> list = cf.searchForContacts(contactTest.getFirstName());
+        assertTrue(list.contains(contactTest));
+        list.clear();
+        //lastName
+        list = cf.searchForContacts(contactTest.getLastName());
+        assertTrue(list.contains(contactTest));
+        this.deleteAllRecords();
+    }
 }
