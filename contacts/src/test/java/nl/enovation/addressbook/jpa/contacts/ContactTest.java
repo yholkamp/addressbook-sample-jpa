@@ -1,4 +1,4 @@
-package org.axonframework.samples.trader.contacts;
+package nl.enovation.addressbook.jpa.contacts;
 
 import java.util.Set;
 

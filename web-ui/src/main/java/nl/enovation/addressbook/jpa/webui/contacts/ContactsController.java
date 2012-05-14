@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.axonframework.samples.trader.webui.contacts;
+package nl.enovation.addressbook.jpa.webui.contacts;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.axonframework.samples.trader.contacts.Contact;
-import org.axonframework.samples.trader.contacts.ContactsFactory;
-import org.axonframework.samples.trader.contacts.SearchValue;
+import nl.enovation.addressbook.jpa.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.ContactsFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -121,20 +121,20 @@ public class ContactsController {
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         List<Contact> listContacts = contactsFactory.getContacts();
-        SearchValue value = new SearchValue();
+        SearchForm value = new SearchForm();
         logger.debug("Dispatching command with name : {getContacts}");
         model.addAttribute("contacts", listContacts);
         model.addAttribute("searchValue", value);
         return "contacts/list";
     }
-    
+
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String search(@ModelAttribute("searchValue") SearchValue value, Model model, BindingResult bindingResult) {
+    public String search(@ModelAttribute("searchValue") SearchForm value, Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "contacts/list";
         }
         List<Contact> listSearchContacts = contactsFactory.searchForContacts(value.getSearchValue());
-//        System.out.println("VALUE" + value);
+        // System.out.println("VALUE" + value);
         logger.debug("Dispatching command with name : {searchForContacts}");
         model.addAttribute("contacts", listSearchContacts);
         return "contacts/list";

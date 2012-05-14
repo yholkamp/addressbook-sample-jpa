@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.axonframework.samples.trader.webui.init;
+package nl.enovation.addressbook.jpa.webui.init;
 
-import org.axonframework.samples.trader.contacts.ContactsFactory;
+import nl.enovation.addressbook.jpa.contacts.ContactsFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;

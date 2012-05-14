@@ -1,4 +1,4 @@
-package org.axonframework.samples.trader.contacts;
+package nl.enovation.addressbook.jpa.contacts;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ContactsFactoryTest {
         contactTest.setFirstName("Name");
         contactTest.setLastName("Last");
         contactTest.setPhoneNumber("061234");
-        
+
         cf = new ContactsFactory();
         contactsDatabase = cf.getEntityManager();
     }
@@ -98,15 +98,15 @@ public class ContactsFactoryTest {
         assertFalse(contactsDatabase.contains(contactTest));
         this.deleteAllRecords();
     }
-    
+
     @Test
     public void testSearchForContact() {
-        //firstName
+        // firstName
         cf.addContact(contactTest);
         List<Contact> list = cf.searchForContacts(contactTest.getFirstName());
         assertTrue(list.contains(contactTest));
         list.clear();
-        //lastName
+        // lastName
         list = cf.searchForContacts(contactTest.getLastName());
         assertTrue(list.contains(contactTest));
         this.deleteAllRecords();

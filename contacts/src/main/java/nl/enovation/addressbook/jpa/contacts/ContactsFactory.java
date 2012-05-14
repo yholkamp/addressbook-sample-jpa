@@ -1,4 +1,4 @@
-package org.axonframework.samples.trader.contacts;
+package nl.enovation.addressbook.jpa.contacts;
 
 import java.util.List;
 
@@ -79,16 +79,17 @@ public class ContactsFactory {
         contactsDatabase.remove(contact);
         contactsDatabase.getTransaction().commit();
     }
-    
+
     /**
      * Searches and return the names that contain the (sub)String value
      * 
-     * @param value is searchValue, looking for firstName or lastName containing this value
+     * @param value
+     *            is searchValue, looking for firstName or lastName containing this value
      * @return list of contacts that contain the String value in firstName or lastName
      */
     public List<Contact> searchForContacts(String value) {
         Query jpqlQuery = contactsDatabase.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
         return jpqlQuery.setParameter("name", "%" + value + "%").getResultList();
-        
+
     }
 }

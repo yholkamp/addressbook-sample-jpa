@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package org.axonframework.samples.trader.webui.init;
+package nl.enovation.addressbook.jpa.webui.init;
 
 import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-import org.axonframework.samples.trader.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.Contact;
+
 import org.springframework.stereotype.Component;
 
 @Component

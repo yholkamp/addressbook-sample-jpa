@@ -1,9 +1,9 @@
-package org.axonframework.samples.trader.contacts;
+package nl.enovation.addressbook.jpa.webui.contacts;
 
-public class SearchValue {
-        
+public class SearchForm {
+
     private String searchValue;
-        
+
     public String getSearchValue() {
         return searchValue;
     }

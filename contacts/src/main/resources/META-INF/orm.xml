@@ -8,5 +8,5 @@
 			<access>FIELD</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata> 
-	<entity class="org.axonframework.samples.trader.contacts.Contact" />
+	<entity class="nl.enovation.addressbook.jpa.contacts.Contact" />
 </entity-mappings>

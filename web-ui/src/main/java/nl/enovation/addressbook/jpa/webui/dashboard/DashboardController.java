@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.axonframework.samples.trader.webui.dashboard;
+package nl.enovation.addressbook.jpa.webui.dashboard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
