@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-
 <content tag="title">Contacts</content>
 <content tag="tagline">Manage your contacts</content>
 <content tag="breadcrumb">

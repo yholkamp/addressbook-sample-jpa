@@ -11,26 +11,41 @@
     </ul>
 </content>
 
-<table class="table hor-minimalist-b">
-    <thead>
+<table class="table table-striped">
     <tr>
-        <th>Type</th>
-        <th>Street and number</th>
-        <th>Zipcode</th>
-        <th>City</th>
-        <th>&nbsp;</th>
+        <td>First Name</td>
+        <td><c:out value='${contact.firstName}'/></td>
     </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${addresses}" var="address">
-        <tr>
-            <td><c:out value='${address.addressType}'/></td>
-            <td><c:out value='${address.streetAndNumber}'/></td>
-            <td><c:out value='${address.zipCode}'/></td>
-            <td><c:out value='${address.city}'/></td>
-            <td><a href="${ctx}/contacts/${identifier}/address/delete/${address.addressType}">Remove</a>
-            </td>
-        </tr>
-    </c:forEach>
-    </tbody>
+
+    <tr>
+        <td>Last Name</td>
+        <td><c:out value='${contact.lastName}'/></td>
+    </tr>
+
+    <tr>
+        <td>Phone Number</td>
+        <td><c:out value='${contact.phoneNumber}'/></td>
+    </tr>
+
+    <tr>
+        <td>Street</td>
+        <td><c:out value='${contact.street}'/></td>
+    </tr>
+
+    <tr>
+        <td>City</td>
+        <td><c:out value='${contact.city}'/></td>
+    </tr>
+
+    <tr>
+        <td>Zip Code</td>
+        <td><c:out value='${contact.zipCode}'/></td>
+    </tr>
+
+    <tr>
+        <td>Department</td>
+        <td><c:out value='${contact.department}'/></td>
+    </tr>
 </table>
+
+
