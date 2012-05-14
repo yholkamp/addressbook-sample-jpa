@@ -53,10 +53,10 @@ public class ContactsController {
 
     @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
     public String details(@PathVariable Long identifier, Model model) {
-        String name = contactsFactory.getContact(identifier).getFirstName();
+        Contact contact = contactsFactory.getContact(identifier);
         logger.debug("Dispatching command with name : {getContact(id)}");
         model.addAttribute("identifier", identifier);
-        model.addAttribute("name", name);
+        model.addAttribute("contact", contact);
         return "contacts/details";
     }
 
