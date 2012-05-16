@@ -21,7 +21,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.ContactsFactory;
+import nl.enovation.addressbook.jpa.repositories.ContactsRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,22 +40,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/contacts")
 public class ContactsController {
 
-    public static final String PERSISTENCE_UNIT = "addressbook";
-
-    private ContactsFactory contactsFactory;
+    private ContactsRepository contactsFactory;
 
     private final static Logger logger = LoggerFactory.getLogger(ContactsController.class);
 
     public ContactsController() {
-        contactsFactory = new ContactsFactory();
-        logger.debug("Dispatching command with name : {Contactscontroller, intialise done}");
+        contactsFactory = new ContactsRepository();
+        logger.debug("Received request for command : {Contactscontroller, intialise done}");
     }
 
     @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
     public String details(@PathVariable Long identifier, Model model) {
         Contact contact = contactsFactory.getContact(identifier);
-        logger.debug("Dispatching command with name : {getContact(id)}");
-        model.addAttribute("identifier", identifier);
+        logger.debug("Received request for command : {getContact(id)}");
         model.addAttribute("contact", contact);
         return "contacts/details";
     }
@@ -64,7 +61,7 @@ public class ContactsController {
     public String formDelete(@ModelAttribute("contact") Contact contact, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             contactsFactory.removeContact(contact);
-            logger.debug("Dispatching command with name : {removeContact(contact)}");
+            logger.debug("Received request for command : {removeContact(contact)}");
             return "redirect:/contacts";
         }
         return "contacts/delete";
@@ -73,7 +70,7 @@ public class ContactsController {
     @RequestMapping(value = "{identifier}/delete", method = RequestMethod.GET)
     public String formDelete(@PathVariable Long identifier, Model model) {
         Contact contact = contactsFactory.getContact(identifier);
-        logger.debug("Dispatching command with name : {getContact(id)}");
+        logger.debug("Received request for command : {getContact(id)}");
         model.addAttribute("contact", contact);
         return "contacts/delete";
     }
@@ -81,7 +78,7 @@ public class ContactsController {
     @RequestMapping(value = "{identifier}/edit", method = RequestMethod.GET)
     public String formEdit(@PathVariable Long identifier, Model model) {
         Contact contact = contactsFactory.getContact(identifier);
-        logger.debug("Dispatching command with name : {getContact(id)}");
+        logger.debug("Received request for command : {getContact(id)}");
         if (contact == null) {
             throw new RuntimeException("contactRepository with ID " + identifier + " could not be found.");
         }
@@ -96,14 +93,14 @@ public class ContactsController {
             return "contacts/edit";
         }
         contactsFactory.editContact(contact);
-        logger.debug("Dispatching command with name : {editContact(contact)}");
+        logger.debug("Received request for command : {editContact(contact)}");
         return "redirect:/contacts";
     }
 
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String formNew(Model model) {
         Contact attributeValue = new Contact();
-        logger.debug("Dispatching command with name : {getContact(id)}");
+        logger.debug("Received request for command : {getContact(id)}");
         model.addAttribute("contact", attributeValue);
         return "contacts/new";
     }
@@ -114,7 +111,7 @@ public class ContactsController {
             return "contacts/new";
         }
         contactsFactory.addContact(contact);
-        logger.debug("Dispatching command with name : {persistContact(contact)}");
+        logger.debug("Received request for command : {persistContact(contact)}");
         return "redirect:/contacts";
     }
 
@@ -122,7 +119,7 @@ public class ContactsController {
     public String list(Model model) {
         List<Contact> listContacts = contactsFactory.getContacts();
         SearchForm value = new SearchForm();
-        logger.debug("Dispatching command with name : {getContacts}");
+        logger.debug("Received request for command : {getContacts}");
         model.addAttribute("contacts", listContacts);
         model.addAttribute("searchValue", value);
         return "contacts/list";
@@ -134,8 +131,7 @@ public class ContactsController {
             return "contacts/list";
         }
         List<Contact> listSearchContacts = contactsFactory.searchForContacts(value.getSearchValue());
-        // System.out.println("VALUE" + value);
-        logger.debug("Dispatching command with name : {searchForContacts}");
+        logger.debug("Received request for command : {searchForContacts}");
         model.addAttribute("contacts", listSearchContacts);
         return "contacts/list";
     }

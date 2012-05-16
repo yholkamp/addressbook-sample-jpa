@@ -17,5 +17,5 @@ rebel.xml
 .classpath
 *~
 # database files
-.db
+*.db
 

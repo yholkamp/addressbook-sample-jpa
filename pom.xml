@@ -17,7 +17,7 @@
 	<packaging>pom</packaging>
 	<version>0.1-SNAPSHOT</version>
 
-	<name>Axon Trader Sample Project</name>
+	<name>Addressbook JPA Sample Project</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,12 +29,9 @@
 		<junit.version>4.8.1</junit.version>
 		<mockito.version>1.8.5</mockito.version>
 		<hamcrest.version>1.1</hamcrest.version>
-		<mongodb.java.version>2.7.2</mongodb.java.version>
-		<springdata.mongodb.version>1.0.0.RELEASE</springdata.mongodb.version>
 	</properties>
 
 	<modules>
-		<module>infrastructure</module>
 		<module>contacts</module>
 		<module>web-ui</module>
 	</modules>
@@ -59,6 +56,11 @@
 						<contextPath>/</contextPath>
 					</webAppConfig>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>1.0</version>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,4 +1,4 @@
-package nl.enovation.addressbook.jpa.contacts;
+package nl.enovation.addressbook.jpa.repositories;
 
 import java.util.List;
 
@@ -6,11 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-public class ContactsFactory {
+import nl.enovation.addressbook.jpa.contacts.Contact;
+
+public class ContactsRepository {
 
     private EntityManager contactsDatabase;
 
-    public ContactsFactory() {
+    public ContactsRepository() {
         contactsDatabase = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
     }
 
@@ -32,10 +34,11 @@ public class ContactsFactory {
      * @param contact
      *            Contact that is changed by user.
      */
-    public void editContact(Contact contact) {
+    public Contact editContact(Contact contact) {
         contactsDatabase.getTransaction().begin();
-        contactsDatabase.merge(contact);
+        Contact contactFromDb = contactsDatabase.merge(contact);
         contactsDatabase.getTransaction().commit();
+        return contactFromDb;
     }
 
     public Contact getContact(Long identifier) {
@@ -45,14 +48,16 @@ public class ContactsFactory {
     /**
      * Get all contacts out of the database.
      * 
-     * @return listContacts List of all the Contacts that are stored in de database
+     * @return listContacts
+     *         List of all the Contacts that are stored in de database
      */
+    @SuppressWarnings("unchecked")
     public List<Contact> getContacts() {
         return contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList();
     }
 
     /**
-     * @return Entitymanager used by ContactsFactory
+     * @return EntityManager used by ContactsFactory
      */
     public EntityManager getEntityManager() {
         return contactsDatabase;
@@ -68,16 +73,19 @@ public class ContactsFactory {
     }
 
     /**
-     * Removes the Contact in the database.
+     * Removes a Contact from the database.
      * 
      * @param contact
-     *            Contact that is removed by user first get the right object, then remove.
+     *            Contact that is to be removed.
+     * @return contact
+     *         The deleted contact merged with any changes in the database.
      */
-    public void removeContact(Contact contact) {
+    public Contact removeContact(Contact contact) {
         contactsDatabase.getTransaction().begin();
-        contact = contactsDatabase.merge(contact);
-        contactsDatabase.remove(contact);
+        Contact mergedContact = contactsDatabase.merge(contact);
+        contactsDatabase.remove(mergedContact);
         contactsDatabase.getTransaction().commit();
+        return mergedContact;
     }
 
     /**
@@ -87,6 +95,7 @@ public class ContactsFactory {
      *            is searchValue, looking for firstName or lastName containing this value
      * @return list of contacts that contain the String value in firstName or lastName
      */
+    @SuppressWarnings("unchecked")
     public List<Contact> searchForContacts(String value) {
         Query jpqlQuery = contactsDatabase.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
         return jpqlQuery.setParameter("name", "%" + value + "%").getResultList();

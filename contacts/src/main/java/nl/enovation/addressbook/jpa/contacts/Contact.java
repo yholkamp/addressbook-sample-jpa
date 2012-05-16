@@ -15,6 +15,8 @@
  */
 package nl.enovation.addressbook.jpa.contacts;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +28,7 @@ import javax.validation.constraints.Size;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long identifier;
 
     @NotNull
@@ -37,17 +39,86 @@ public class Contact {
     @Size(min = 2, max = 255)
     private String lastName;
 
-    @NotNull
-    @Size(min = 6, max = 14)
-    private String phoneNumber;
-
     private String street;
 
     private String city;
 
     private String zipCode;
 
+    private List<PhoneNumberEntry> phoneNumbers;
+
     private String department;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Contact other = (Contact) obj;
+        if (city == null) {
+            if (other.city != null) {
+                return false;
+            }
+        } else if (!city.equals(other.city)) {
+            return false;
+        }
+        if (department == null) {
+            if (other.department != null) {
+                return false;
+            }
+        } else if (!department.equals(other.department)) {
+            return false;
+        }
+        if (firstName == null) {
+            if (other.firstName != null) {
+                return false;
+            }
+        } else if (!firstName.equals(other.firstName)) {
+            return false;
+        }
+        if (identifier == null) {
+            if (other.identifier != null) {
+                return false;
+            }
+        } else if (!identifier.equals(other.identifier)) {
+            return false;
+        }
+        if (lastName == null) {
+            if (other.lastName != null) {
+                return false;
+            }
+        } else if (!lastName.equals(other.lastName)) {
+            return false;
+        }
+        if (phoneNumbers == null) {
+            if (other.phoneNumbers != null) {
+                return false;
+            }
+        } else if (!phoneNumbers.equals(other.phoneNumbers)) {
+            return false;
+        }
+        if (street == null) {
+            if (other.street != null) {
+                return false;
+            }
+        } else if (!street.equals(other.street)) {
+            return false;
+        }
+        if (zipCode == null) {
+            if (other.zipCode != null) {
+                return false;
+            }
+        } else if (!zipCode.equals(other.zipCode)) {
+            return false;
+        }
+        return true;
+    }
 
     public String getCity() {
         return city;
@@ -69,8 +140,8 @@ public class Contact {
         return lastName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public List<PhoneNumberEntry> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
     public String getStreet() {
@@ -79,6 +150,21 @@ public class Contact {
 
     public String getZipCode() {
         return zipCode;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((city == null) ? 0 : city.hashCode());
+        result = prime * result + ((department == null) ? 0 : department.hashCode());
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((phoneNumbers == null) ? 0 : phoneNumbers.hashCode());
+        result = prime * result + ((street == null) ? 0 : street.hashCode());
+        result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
+        return result;
     }
 
     public void setCity(String city) {
@@ -101,8 +187,8 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(List<PhoneNumberEntry> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     public void setStreet(String street) {

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import nl.enovation.addressbook.jpa.repositories.ContactsRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,10 +20,10 @@ public class ContactsFactoryTest {
 
     private EntityManager contactsDatabase;
 
-    private ContactsFactory cf;
+    private ContactsRepository cf;
 
     public void deleteAllRecords() {
-        // clear the datbase.
+        // clear the database.
         contactsDatabase.getTransaction().begin();
         Query query = contactsDatabase.createQuery("DELETE FROM Contact c");
         query.executeUpdate();
@@ -34,9 +36,8 @@ public class ContactsFactoryTest {
 
         contactTest.setFirstName("Name");
         contactTest.setLastName("Last");
-        contactTest.setPhoneNumber("061234");
 
-        cf = new ContactsFactory();
+        cf = new ContactsRepository();
         contactsDatabase = cf.getEntityManager();
     }
 

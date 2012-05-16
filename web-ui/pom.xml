@@ -20,7 +20,7 @@
 	<groupId>nl.enovation</groupId>
 	<artifactId>addressbook-jpa-webui</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Axon Trader Sample - Web ui</name>
+	<name>Addressbook JPA Sample Project - Web ui</name>
 	<packaging>war</packaging>
 
 	<build>
@@ -43,11 +43,6 @@
 		<dependency>
 			<groupId>nl.enovation</groupId>
 			<artifactId>addressbook-jpa-contacts</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>nl.enovation</groupId>
-			<artifactId>addressbook-jpa-infrastructure</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -145,6 +140,23 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -63,8 +63,6 @@ public class ContactTest {
         contact.setDepartment(department);
         assertEquals(contact.getDepartment(), department);
 
-        contact.setPhoneNumber(phoneNumber);
-        assertEquals(contact.getPhoneNumber(), phoneNumber);
         // generate long string
         for (int x = 0; x < 51; x++) {
             sb.append("Fives");
@@ -153,28 +151,4 @@ public class ContactTest {
         assertEquals(constraintViolations.size(), 1);
     }
 
-    @Test
-    public void testPhoneNumber() {
-        // validation is true, because all constraints are legal
-        Set<ConstraintViolation<Contact>> constraintViolations = validator.validate(contact);
-        assertEquals(constraintViolations.size(), 0);
-
-        // phonenumber may not be null
-        contact.setPhoneNumber(phoneNumberNull);
-        // validation is false, because null is not valid
-        constraintViolations = validator.validate(contact);
-        assertEquals(constraintViolations.size(), 1);
-
-        // phonenumber may not be longer than 14
-        contact.setPhoneNumber(phoneNumberLong);
-        // validation is false, because null is not valid
-        constraintViolations = validator.validate(contact);
-        assertEquals(constraintViolations.size(), 1);
-
-        // phonenumber may not be shorter than 6
-        contact.setPhoneNumber(phoneNumberShort);
-        // validation is false, because null is not valid
-        constraintViolations = validator.validate(contact);
-        assertEquals(constraintViolations.size(), 1);
-    }
 }

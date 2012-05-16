@@ -66,7 +66,7 @@ public class DBInit {
                 p.setFirstName(fnames[r.nextInt(fnames.length)]);
                 p.setLastName(lnames[r.nextInt(lnames.length)]);
                 p.setCity(cities[r.nextInt(cities.length)]);
-                p.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
+//                p.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
                 int n = r.nextInt(100000);
                 if (n < 10000) {
                     n += 10000;
