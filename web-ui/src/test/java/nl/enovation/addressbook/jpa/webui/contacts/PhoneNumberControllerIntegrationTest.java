@@ -35,7 +35,7 @@ public class PhoneNumberControllerIntegrationTest {
 
     @Autowired
     private ContactsRepository contactsFactory;
-    
+
     @Autowired
     private PhoneNumberEntryRepository phoneNumberRepository;
     
@@ -67,6 +67,8 @@ public class PhoneNumberControllerIntegrationTest {
     
     @Test
     public void testDeleteForm() {
+        assertNotNull("PhoneNumberRepository should not be null", phoneNumberRepository);
+
         // Set up a contact
         Contact contact = createContact();
         contactsFactory.addContact(contact);
