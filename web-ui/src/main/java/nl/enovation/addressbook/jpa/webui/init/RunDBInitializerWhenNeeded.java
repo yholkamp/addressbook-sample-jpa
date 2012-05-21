@@ -16,7 +16,7 @@
 
 package nl.enovation.addressbook.jpa.webui.init;
 
-import nl.enovation.addressbook.jpa.repositories.ContactsRepository;
+import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class RunDBInitializerWhenNeeded implements ApplicationListener<ContextRe
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        ContactsRepository contactsFactory = new ContactsRepository();
+        ContactRepository contactsFactory = new ContactRepository();
         if (contactsFactory.isEmpty()) {
             DBInit.createItems();
             logger.info("The database has been created and refreshed with some data.");

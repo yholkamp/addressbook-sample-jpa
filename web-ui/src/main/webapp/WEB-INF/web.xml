@@ -20,13 +20,12 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 
-    <display-name>Axon framework Trader sample</display-name>
+    <display-name>Addressbook Sample JPA </display-name>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
            classpath:META-INF/spring/contacts-context.xml
-           classpath:META-INF/spring/persistence.xml
         </param-value>
     </context-param>
 <!-- 

@@ -16,23 +16,35 @@
 package nl.enovation.addressbook.jpa.contacts;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class PhoneNumberEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long identifier;
+
     private String phoneNumber;
 
     @NotNull
     private PhoneNumberType phoneNumberType;
-    
-    @NotNull
+
     private Contact contact;
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public Long getIdentifier() {
+        return identifier;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -42,6 +54,14 @@ public class PhoneNumberEntry {
         return phoneNumberType;
     }
 
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public void setIdentifier(Long identifier) {
+        this.identifier = identifier;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -49,13 +69,4 @@ public class PhoneNumberEntry {
     public void setPhoneNumberType(PhoneNumberType phoneNumberType) {
         this.phoneNumberType = phoneNumberType;
     }
-
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
 }

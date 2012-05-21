@@ -14,13 +14,6 @@
         </div>
     </div>
     <div class="control-group">
-        <form:label path="phoneNumber" cssClass="control-label">Phone Number</form:label>
-        <div class="controls">
-            <form:input path="phoneNumber"/>
-            <form:errors path="phoneNumber" cssClass="error-inline"/>
-        </div>
-    </div>
-    <div class="control-group">
         <form:label path="street" cssClass="control-label">Street</form:label>
         <div class="controls">
             <form:input path="street"/>
@@ -53,4 +46,3 @@
         <input type="submit" name="submit" value="Submit" class="btn btn-primary"/>
     </div>
 </fieldset>
-

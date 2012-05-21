@@ -1,4 +1,4 @@
-package nl.enovation.addressbook.jpa.webui.contacts;
+package nl.enovation.addressbook.jpa.webui.forms;
 
 public class SearchForm {
 

@@ -1,6 +1,5 @@
 <%@include file="../include.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <content tag="title">Contacts</content>
 <content tag="tagline">Manage your contacts</content>
@@ -14,7 +13,6 @@
 <p class="pull-left"><a href="${ctx}/contacts/new">Create a new contact</a></p>
 
 <form:form action="${ctx}/contacts/search" commandName="searchValue" cssClass="form-horizontal form-search pull-right" method="POST">
-   
     <form:input path="searchValue" cssClass="input-medium search-query"/>
     <button type="submit" name="submit" value="Search" class="btn">Search</button>
 </form:form>
@@ -24,7 +22,6 @@
     <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Phone Number</th>
         <th>City</th>
         <th>Department</th>
         <th>Actions</th>
@@ -35,7 +32,6 @@
         <tr>
             <td><c:out value='${contact.firstName}'/></td>
             <td><c:out value='${contact.lastName}'/></td>
-            <td><c:out value='${contact.phoneNumber}'/></td>
             <td><c:out value='${contact.city}'/></td>
             <td><c:out value='${contact.department}'/></td>
             <td>

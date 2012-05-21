@@ -8,11 +8,11 @@ import javax.persistence.Query;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
 
-public class ContactsRepository {
+public class ContactRepository {
 
     private EntityManager contactsDatabase;
 
-    public ContactsRepository() {
+    public ContactRepository() {
         contactsDatabase = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
     }
 
@@ -22,7 +22,7 @@ public class ContactsRepository {
      * @param contact
      *            Contact that is stored in the database
      */
-    public void addContact(Contact contact) {
+    public void add(Contact contact) {
         contactsDatabase.getTransaction().begin();
         contactsDatabase.persist(contact);
         contactsDatabase.getTransaction().commit();
@@ -33,15 +33,15 @@ public class ContactsRepository {
      * 
      * @param contact
      *            Contact that is changed by user.
-     */
-    public Contact editContact(Contact contact) {
+     */ 
+    public Contact save(Contact contact) {
         contactsDatabase.getTransaction().begin();
         Contact contactFromDb = contactsDatabase.merge(contact);
         contactsDatabase.getTransaction().commit();
         return contactFromDb;
     }
 
-    public Contact getContact(Long identifier) {
+    public Contact findOne(Long identifier) {
         return contactsDatabase.find(Contact.class, identifier);
     }
 
@@ -52,7 +52,7 @@ public class ContactsRepository {
      *         List of all the Contacts that are stored in de database
      */
     @SuppressWarnings("unchecked")
-    public List<Contact> getContacts() {
+    public List<Contact> findAll() {
         return contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList();
     }
 
@@ -80,7 +80,7 @@ public class ContactsRepository {
      * @return contact
      *         The deleted contact merged with any changes in the database.
      */
-    public Contact removeContact(Contact contact) {
+    public Contact delete(Contact contact) {
         contactsDatabase.getTransaction().begin();
         Contact mergedContact = contactsDatabase.merge(contact);
         contactsDatabase.remove(mergedContact);
@@ -96,9 +96,8 @@ public class ContactsRepository {
      * @return list of contacts that contain the String value in firstName or lastName
      */
     @SuppressWarnings("unchecked")
-    public List<Contact> searchForContacts(String value) {
+    public List<Contact> findByName(String value) {
         Query jpqlQuery = contactsDatabase.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
         return jpqlQuery.setParameter("name", "%" + value + "%").getResultList();
-
     }
 }

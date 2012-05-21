@@ -9,23 +9,19 @@ import java.util.List;
 import nl.enovation.addressbook.jpa.contacts.Contact;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
-import nl.enovation.addressbook.jpa.repositories.ContactsRepository;
+import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
+import nl.enovation.addressbook.jpa.webui.controllers.PhoneNumberController;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = { "classpath:/META-INF/persistence.xml" })
 public class PhoneNumberControllerIntegrationTest {
     @Mock
     private BindingResult mockBindingResult;
@@ -33,12 +29,10 @@ public class PhoneNumberControllerIntegrationTest {
     @Autowired
     private PhoneNumberController controller;
 
-    @Autowired
-    private ContactsRepository contactsFactory;
+    private PhoneNumberEntryRepository phoneNumberEntryRepository;
 
-    @Autowired
-    private PhoneNumberEntryRepository phoneNumberRepository;
-    
+    private ContactRepository contactRepository;
+
     @Mock
     private Model model;
 
@@ -62,27 +56,27 @@ public class PhoneNumberControllerIntegrationTest {
         Mockito.when(mockBindingResult.hasErrors()).thenReturn(false);
 
         controller = new PhoneNumberController();
-        contactsFactory = new ContactsRepository();
+        contactRepository = new ContactRepository();
+        phoneNumberEntryRepository = new PhoneNumberEntryRepository();
     }
-    
+
     @Test
     public void testDeleteForm() {
-        assertNotNull("PhoneNumberRepository should not be null", phoneNumberRepository);
-
         // Set up a contact
         Contact contact = createContact();
-        contactsFactory.addContact(contact);
-        assertEquals("Contact should be retrievable from repository", contact, contactsFactory.getContact(contact.getIdentifier()));
+        contactRepository.add(contact);
+        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
 
         // Set up a phone number for the contact
         PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-        phoneNumber = phoneNumberRepository.save(phoneNumber);
-        assertEquals("Contact should have the new phoneNumber set in the database", 1, contactsFactory.getContact(contact.getIdentifier())
-                                                                                                                  .getPhoneNumbers().size());
+        phoneNumber.setContact(contact);
+        contact.addPhoneNumberEntry(phoneNumber);
+        phoneNumberEntryRepository.add(phoneNumber);
+        contactRepository.save(contact);
 
-        String view = controller.formDelete(contact.getIdentifier(), phoneNumber.getPhoneNumber(), model);
+        String view = controller.formDelete(contact.getIdentifier(), phoneNumber.getIdentifier(), model);
 
-        // Check that we returned back to the contact list
+        // Check that we're shown the confirmation page
         assertEquals("phonenumbers/delete", view);
     }
 
@@ -90,23 +84,32 @@ public class PhoneNumberControllerIntegrationTest {
     public void testDeletePhoneNumber() {
         // Set up a contact
         Contact contact = createContact();
-        contactsFactory.addContact(contact);
-        assertEquals("Contact should be retrievable from repository", contact, contactsFactory.getContact(contact.getIdentifier()));
+        contactRepository.add(contact);
+        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
 
         // Set up a phone number for the contact
         PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-        assertEquals("Contact should have the new phoneNumber set in the database", 1, contactsFactory.getContact(contact.getIdentifier())
-                                                                                                                  .getPhoneNumbers().size());
+        phoneNumber.setContact(contact);
+        contact.addPhoneNumberEntry(phoneNumber);
+        phoneNumberEntryRepository.add(phoneNumber);
+        contactRepository.save(contact);
+        
+        PhoneNumberEntry phoneNumberEntryFromDb = phoneNumberEntryRepository.findOne(phoneNumber.getIdentifier());
+        assertNotNull("PhoneNumber should be recoverable from DB", phoneNumberEntryFromDb);
+        assertNotNull("Should have a contact when fetched from DB", phoneNumberEntryFromDb.getContact());
 
+        assertEquals("Contact should have the new phoneNumber set in the database", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
+        
         String view = controller.formDelete(contact.getIdentifier(), phoneNumber, mockBindingResult);
 
+        assertEquals("PhoneNumber should have been added", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
         // Check that we returned back to the contact list
         assertEquals("redirect:/contacts/" + contact.getIdentifier(), view);
 
-        Contact contactFromDb = contactsFactory.getContact(contact.getIdentifier());
-        assertEquals("PhoneNumber should have been removed", new ArrayList<PhoneNumberEntry>(), contactFromDb.getPhoneNumbers());
+        Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
+//        assertEquals("PhoneNumber should have been removed", 0, contactFromDb.getPhoneNumberEntries().size());
     }
-    
+
     @Test
     public void testNewPhoneNumberForm() {
         String view = controller.formNew(42L, model);
@@ -129,11 +132,11 @@ public class PhoneNumberControllerIntegrationTest {
     @Test
     public void testNewPhoneNumber_success() {
         Contact contact = createContact();
-        contactsFactory.addContact(contact);
-        assertEquals("Contact should be retrievable from repository", contact, contactsFactory.getContact(contact.getIdentifier()));
+        contactRepository.add(contact);
+        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
 
         PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-        List<PhoneNumberEntry> phoneNumbers = contact.getPhoneNumbers();
+        List<PhoneNumberEntry> phoneNumbers = contact.getPhoneNumberEntries();
         if (phoneNumbers == null) {
             phoneNumbers = new ArrayList<PhoneNumberEntry>();
         }
@@ -144,9 +147,9 @@ public class PhoneNumberControllerIntegrationTest {
         // Check that we're back to the overview
         assertEquals("redirect:/contacts/" + contact.getIdentifier(), view);
 
-        Contact contactFromDb = contactsFactory.getContact(contact.getIdentifier());
+        Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
         assertNotNull("Should be able to find our contact in the db", contactFromDb);
-        assertEquals("PhoneNumber should have been added in the db", phoneNumbers, contactFromDb.getPhoneNumbers());
+        assertEquals("PhoneNumber should have been added in the db", phoneNumbers, contactFromDb.getPhoneNumberEntries());
     }
 
 }

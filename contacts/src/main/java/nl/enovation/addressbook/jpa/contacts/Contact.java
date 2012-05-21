@@ -17,10 +17,14 @@ package nl.enovation.addressbook.jpa.contacts;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -45,7 +49,7 @@ public class Contact {
 
     private String zipCode;
 
-    private List<PhoneNumberEntry> phoneNumbers;
+    private List<PhoneNumberEntry> phoneNumberEntries;
 
     private String department;
 
@@ -96,11 +100,11 @@ public class Contact {
         } else if (!lastName.equals(other.lastName)) {
             return false;
         }
-        if (phoneNumbers == null) {
-            if (other.phoneNumbers != null) {
+        if (phoneNumberEntries == null) {
+            if (other.phoneNumberEntries != null) {
                 return false;
             }
-        } else if (!phoneNumbers.equals(other.phoneNumbers)) {
+        } else if (!phoneNumberEntries.equals(other.phoneNumberEntries)) {
             return false;
         }
         if (street == null) {
@@ -140,16 +144,18 @@ public class Contact {
         return lastName;
     }
 
-    public List<PhoneNumberEntry> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
     public String getStreet() {
         return street;
     }
 
     public String getZipCode() {
         return zipCode;
+    }
+
+    @OneToMany
+    @JoinColumn(name="CONTACT_ID")
+    public List<PhoneNumberEntry> getPhoneNumberEntries() {
+        return phoneNumberEntries;
     }
 
     @Override
@@ -161,7 +167,7 @@ public class Contact {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((phoneNumbers == null) ? 0 : phoneNumbers.hashCode());
+        result = prime * result + ((phoneNumberEntries == null) ? 0 : phoneNumberEntries.hashCode());
         result = prime * result + ((street == null) ? 0 : street.hashCode());
         result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
         return result;
@@ -187,8 +193,8 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public void setPhoneNumber(List<PhoneNumberEntry> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+    public void setPhoneNumberEntries(List<PhoneNumberEntry> phoneNumbers) {
+        this.phoneNumberEntries = phoneNumbers;
     }
 
     public void setStreet(String street) {
@@ -197,5 +203,26 @@ public class Contact {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    /**
+     * Adds a phoneNumber to the contact's list and sets the current contact for the PhoneNumberEntry, both without persisting the changes.
+     * 
+     * @param phoneNumberEntry
+     */
+    public void addPhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
+        phoneNumberEntries.add(phoneNumberEntry);
+        if (phoneNumberEntry.getContact() != this) {
+            phoneNumberEntry.setContact(this);
+        }
+    }
+
+    /**
+     * Removes a phoneNumber from the contact's list without persisting the changes.
+     * 
+     * @param phoneNumberEntry
+     */
+    public void removePhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
+        phoneNumberEntries.remove(phoneNumberEntry);
     }
 }

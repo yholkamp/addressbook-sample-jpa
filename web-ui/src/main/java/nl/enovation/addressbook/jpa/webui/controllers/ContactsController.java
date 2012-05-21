@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package nl.enovation.addressbook.jpa.webui.contacts;
+package nl.enovation.addressbook.jpa.webui.controllers;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.repositories.ContactsRepository;
+import nl.enovation.addressbook.jpa.repositories.ContactRepository;
+import nl.enovation.addressbook.jpa.webui.forms.SearchForm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,18 +41,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/contacts")
 public class ContactsController {
 
-    private ContactsRepository contactsFactory;
+    private ContactRepository contactsFactory;
 
     private final static Logger logger = LoggerFactory.getLogger(ContactsController.class);
 
     public ContactsController() {
-        contactsFactory = new ContactsRepository();
+        contactsFactory = new ContactRepository();
         logger.debug("Received request for command : {Contactscontroller, intialise done}");
     }
 
     @RequestMapping(value = "{identifier}", method = RequestMethod.GET)
     public String details(@PathVariable Long identifier, Model model) {
-        Contact contact = contactsFactory.getContact(identifier);
+        Contact contact = contactsFactory.findOne(identifier);
         logger.debug("Received request for command : {getContact(id)}");
         model.addAttribute("contact", contact);
         return "contacts/details";
@@ -60,7 +61,7 @@ public class ContactsController {
     @RequestMapping(value = "{identifier}/delete", method = RequestMethod.POST)
     public String formDelete(@ModelAttribute("contact") Contact contact, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            contactsFactory.removeContact(contact);
+            contactsFactory.delete(contact);
             logger.debug("Received request for command : {removeContact(contact)}");
             return "redirect:/contacts";
         }
@@ -69,7 +70,7 @@ public class ContactsController {
 
     @RequestMapping(value = "{identifier}/delete", method = RequestMethod.GET)
     public String formDelete(@PathVariable Long identifier, Model model) {
-        Contact contact = contactsFactory.getContact(identifier);
+        Contact contact = contactsFactory.findOne(identifier);
         logger.debug("Received request for command : {getContact(id)}");
         model.addAttribute("contact", contact);
         return "contacts/delete";
@@ -77,7 +78,7 @@ public class ContactsController {
 
     @RequestMapping(value = "{identifier}/edit", method = RequestMethod.GET)
     public String formEdit(@PathVariable Long identifier, Model model) {
-        Contact contact = contactsFactory.getContact(identifier);
+        Contact contact = contactsFactory.findOne(identifier);
         logger.debug("Received request for command : {getContact(id)}");
         if (contact == null) {
             throw new RuntimeException("contactRepository with ID " + identifier + " could not be found.");
@@ -92,7 +93,7 @@ public class ContactsController {
         if (bindingResult.hasErrors()) {
             return "contacts/edit";
         }
-        contactsFactory.editContact(contact);
+        contactsFactory.save(contact);
         logger.debug("Received request for command : {editContact(contact)}");
         return "redirect:/contacts";
     }
@@ -110,14 +111,14 @@ public class ContactsController {
         if (bindingResult.hasErrors()) {
             return "contacts/new";
         }
-        contactsFactory.addContact(contact);
+        contactsFactory.add(contact);
         logger.debug("Received request for command : {persistContact(contact)}");
         return "redirect:/contacts";
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        List<Contact> listContacts = contactsFactory.getContacts();
+        List<Contact> listContacts = contactsFactory.findAll();
         SearchForm value = new SearchForm();
         logger.debug("Received request for command : {getContacts}");
         model.addAttribute("contacts", listContacts);
@@ -130,7 +131,7 @@ public class ContactsController {
         if (bindingResult.hasErrors()) {
             return "contacts/list";
         }
-        List<Contact> listSearchContacts = contactsFactory.searchForContacts(value.getSearchValue());
+        List<Contact> listSearchContacts = contactsFactory.findByName(value.getSearchValue());
         logger.debug("Received request for command : {searchForContacts}");
         model.addAttribute("contacts", listSearchContacts);
         return "contacts/list";
