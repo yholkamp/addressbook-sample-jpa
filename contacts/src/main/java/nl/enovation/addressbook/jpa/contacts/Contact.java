@@ -15,31 +15,31 @@
  */
 package nl.enovation.addressbook.jpa.contacts;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "contact")
 public class Contact {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long identifier;
 
-    @NotNull
     @Size(min = 1, max = 255)
     private String firstName;
 
-    @NotNull
     @Size(min = 2, max = 255)
     private String lastName;
 
@@ -49,9 +49,14 @@ public class Contact {
 
     private String zipCode;
 
-    private List<PhoneNumberEntry> phoneNumberEntries;
+    private Set<PhoneNumberEntry> phoneNumberEntries = new HashSet<PhoneNumberEntry>(0);
 
     private String department;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
+    public Set<PhoneNumberEntry> getPhoneNumberEntries() {
+        return phoneNumberEntries;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -136,6 +141,8 @@ public class Contact {
         return firstName;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
     public Long getIdentifier() {
         return identifier;
     }
@@ -150,12 +157,6 @@ public class Contact {
 
     public String getZipCode() {
         return zipCode;
-    }
-
-    @OneToMany
-    @JoinColumn(name="CONTACT_ID")
-    public List<PhoneNumberEntry> getPhoneNumberEntries() {
-        return phoneNumberEntries;
     }
 
     @Override
@@ -193,7 +194,7 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public void setPhoneNumberEntries(List<PhoneNumberEntry> phoneNumbers) {
+    public void setPhoneNumberEntries(Set<PhoneNumberEntry> phoneNumbers) {
         this.phoneNumberEntries = phoneNumbers;
     }
 
@@ -205,24 +206,27 @@ public class Contact {
         this.zipCode = zipCode;
     }
 
-    /**
-     * Adds a phoneNumber to the contact's list and sets the current contact for the PhoneNumberEntry, both without persisting the changes.
-     * 
-     * @param phoneNumberEntry
-     */
-    public void addPhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
-        phoneNumberEntries.add(phoneNumberEntry);
-        if (phoneNumberEntry.getContact() != this) {
-            phoneNumberEntry.setContact(this);
-        }
-    }
-
-    /**
-     * Removes a phoneNumber from the contact's list without persisting the changes.
-     * 
-     * @param phoneNumberEntry
-     */
-    public void removePhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
-        phoneNumberEntries.remove(phoneNumberEntry);
-    }
+    // /**
+    // * Adds a phoneNumber to the contact's list and sets the current contact for the PhoneNumberEntry, both without persisting the changes.
+    // *
+    // * @param phoneNumberEntry
+    // */
+    // public void addPhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
+    // if(phoneNumberEntries == null ) {
+    // phoneNumberEntries = new ArrayList<PhoneNumberEntry>();
+    // }
+    // phoneNumberEntries.add(phoneNumberEntry);
+    // if (phoneNumberEntry.getContact() != this) {
+    // phoneNumberEntry.setContact(this);
+    // }
+    // }
+    //
+    // /**
+    // * Removes a phoneNumber from the contact's list without persisting the changes.
+    // *
+    // * @param phoneNumberEntry
+    // */
+    // public void removePhoneNumberEntry(PhoneNumberEntry phoneNumberEntry) {
+    // phoneNumberEntries.remove(phoneNumberEntry);
+    // }
 }

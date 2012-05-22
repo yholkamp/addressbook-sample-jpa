@@ -2,32 +2,20 @@ package nl.enovation.addressbook.jpa.repositories;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 
 public class ContactRepository {
 
-    private EntityManager contactsDatabase;
+    private Session session;
 
     public ContactRepository() {
-        contactsDatabase = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
+        session = HibernateUtil.getSessionFactory().openSession();
     }
-
-    /**
-     * Stores a Contact in the database.
-     * 
-     * @param contact
-     *            Contact that is stored in the database
-     */
-    public void add(Contact contact) {
-        contactsDatabase.getTransaction().begin();
-        contactsDatabase.persist(contact);
-        contactsDatabase.getTransaction().commit();
-    }
-
+    
     /**
      * Updates the Contact in the database with the parameter Contact.
      * 
@@ -35,14 +23,18 @@ public class ContactRepository {
      *            Contact that is changed by user.
      */ 
     public Contact save(Contact contact) {
-        contactsDatabase.getTransaction().begin();
-        Contact contactFromDb = contactsDatabase.merge(contact);
-        contactsDatabase.getTransaction().commit();
-        return contactFromDb;
+        if (contact.getIdentifier() == null) {
+            session.getTransaction().begin();
+            session.persist(contact);
+            session.getTransaction().commit();
+            return contact;
+        } else {
+            return (Contact) session.merge(contact);
+        }
     }
 
     public Contact findOne(Long identifier) {
-        return contactsDatabase.find(Contact.class, identifier);
+        return (Contact) session.load(Contact.class, identifier);
     }
 
     /**
@@ -53,14 +45,7 @@ public class ContactRepository {
      */
     @SuppressWarnings("unchecked")
     public List<Contact> findAll() {
-        return contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList();
-    }
-
-    /**
-     * @return EntityManager used by ContactsFactory
-     */
-    public EntityManager getEntityManager() {
-        return contactsDatabase;
+        return session.createQuery("SELECT c FROM Contact c").list();
     }
 
     /**
@@ -69,7 +54,7 @@ public class ContactRepository {
      * @return Boolean is true if the database is empty.
      */
     public boolean isEmpty() {
-        return contactsDatabase.createQuery("SELECT c FROM Contact c").getResultList().isEmpty();
+        return session.createQuery("SELECT c FROM Contact c").list().isEmpty();
     }
 
     /**
@@ -81,10 +66,10 @@ public class ContactRepository {
      *         The deleted contact merged with any changes in the database.
      */
     public Contact delete(Contact contact) {
-        contactsDatabase.getTransaction().begin();
-        Contact mergedContact = contactsDatabase.merge(contact);
-        contactsDatabase.remove(mergedContact);
-        contactsDatabase.getTransaction().commit();
+        session.getTransaction().begin();
+        Contact mergedContact = (Contact) session.merge(contact);
+        session.delete(mergedContact);
+        session.getTransaction().commit();
         return mergedContact;
     }
 
@@ -97,7 +82,7 @@ public class ContactRepository {
      */
     @SuppressWarnings("unchecked")
     public List<Contact> findByName(String value) {
-        Query jpqlQuery = contactsDatabase.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
-        return jpqlQuery.setParameter("name", "%" + value + "%").getResultList();
+        Query jpqlQuery = session.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
+        return jpqlQuery.setParameter("name", "%" + value + "%").list();
     }
 }

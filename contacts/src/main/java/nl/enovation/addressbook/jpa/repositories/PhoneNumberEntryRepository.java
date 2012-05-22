@@ -1,32 +1,25 @@
 package nl.enovation.addressbook.jpa.repositories;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
+import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.hibernate.Session;
+
 public class PhoneNumberEntryRepository {
 
-    private EntityManager phoneNumberEM;
+//    private Session session;
 
     public PhoneNumberEntryRepository() {
-        phoneNumberEM = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
-    }
-
-    /**
-     * Stores a PhoneNumberEntry in the database.
-     * 
-     * @param contact
-     *            PhoneNumberEntry that is stored in the database
-     */
-    public void add(PhoneNumberEntry contact) {
-        phoneNumberEM.getTransaction().begin();
-        phoneNumberEM.persist(contact);
-        phoneNumberEM.getTransaction().commit();
+//        session = HibernateUtil.getSessionFactory().openSession();
     }
 
     /**
@@ -36,11 +29,14 @@ public class PhoneNumberEntryRepository {
      *            PhoneNumberEntry that is changed by user.
      */
     public PhoneNumberEntry save(PhoneNumberEntry phoneNumberEntry) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
         if (phoneNumberEntry.getIdentifier() == null) {
-            phoneNumberEM.persist(phoneNumberEntry);
+            session.save(phoneNumberEntry);
+            session.flush();
             return phoneNumberEntry;
         } else {
-            return phoneNumberEM.merge(phoneNumberEntry);
+            session.save(phoneNumberEntry);;
+            return phoneNumberEntry;
         }
     }
 
@@ -51,7 +47,8 @@ public class PhoneNumberEntryRepository {
      * @return phoneNumberEntry
      */
     public PhoneNumberEntry findOne(Long identifier) {
-        return phoneNumberEM.find(PhoneNumberEntry.class, identifier);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return (PhoneNumberEntry) session.load(PhoneNumberEntry.class, identifier);
     }
 
     /**
@@ -62,14 +59,8 @@ public class PhoneNumberEntryRepository {
      */
     @SuppressWarnings("unchecked")
     public List<PhoneNumberEntry> findAll() {
-        return phoneNumberEM.createQuery("SELECT c FROM PhoneNumberEntry c").getResultList();
-    }
-
-    /**
-     * @return EntityManager used by PhoneNumberEntriesFactory
-     */
-    public EntityManager getEntityManager() {
-        return phoneNumberEM;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.createQuery("SELECT * FROM contact").list();
     }
 
     /**
@@ -78,7 +69,8 @@ public class PhoneNumberEntryRepository {
      * @return Boolean is true if the database is empty.
      */
     public boolean isEmpty() {
-        return phoneNumberEM.createQuery("SELECT c FROM PhoneNumberEntry c").getResultList().isEmpty();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.createQuery("SELECT c FROM PhoneNumberEntry c").list().size() == 0;
     }
 
     /**
@@ -90,9 +82,10 @@ public class PhoneNumberEntryRepository {
      *         The deleted contact merged with any changes in the database.
      */
     public void delete(PhoneNumberEntry phoneNumberEntry) {
-        phoneNumberEM.getTransaction().begin();
-        PhoneNumberEntry mergedPhoneNumberEntry = phoneNumberEM.merge(phoneNumberEntry);
-        phoneNumberEM.remove(mergedPhoneNumberEntry);
-        phoneNumberEM.getTransaction().commit();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+//        session.beginTransaction();
+        phoneNumberEntry = (PhoneNumberEntry) session.merge(phoneNumberEntry);
+        session.delete(phoneNumberEntry);
+//        session.getTransaction().commit();
     }
 }

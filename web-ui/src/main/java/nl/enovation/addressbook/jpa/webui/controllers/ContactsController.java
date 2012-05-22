@@ -111,7 +111,7 @@ public class ContactsController {
         if (bindingResult.hasErrors()) {
             return "contacts/new";
         }
-        contactsFactory.add(contact);
+        contactsFactory.save(contact);
         logger.debug("Received request for command : {persistContact(contact)}");
         return "redirect:/contacts";
     }

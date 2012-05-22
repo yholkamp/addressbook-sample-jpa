@@ -60,8 +60,8 @@ public class PhoneNumberController {
                              BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             Contact contact = contactsRepository.findOne(contactIdentifier);
-            contact.removePhoneNumberEntry(phoneNumber);
             phoneNumberRepository.delete(phoneNumber);
+            contact.getPhoneNumberEntries().remove(phoneNumber);
             contactsRepository.save(contact);
 
             return "redirect:/contacts/" + contactIdentifier;
@@ -95,11 +95,8 @@ public class PhoneNumberController {
         }
         Contact contact = contactsRepository.findOne(contactIdentifier);
         phoneNumber.setContact(contact);
+        contact.getPhoneNumberEntries().add(phoneNumber);
         phoneNumberRepository.save(phoneNumber);
-        phoneNumber.setContact(contact);
-        phoneNumberRepository.save(phoneNumber);
-        contact.addPhoneNumberEntry(phoneNumber);
-        contactsRepository.save(contact);
 
         return "redirect:/contacts/" + contactIdentifier;
     }
