@@ -16,15 +16,21 @@
 
 package nl.enovation.addressbook.jpa.webui.controllers;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,22 +54,40 @@ public class PhoneNumberController {
     private PhoneNumberEntryRepository phoneNumberRepository;
 
     private final static Logger logger = LoggerFactory.getLogger(PhoneNumberController.class);
-
+    
+    private Session session;
+    
     public PhoneNumberController() {
         contactsRepository = new ContactRepository();
         phoneNumberRepository = new PhoneNumberEntryRepository();
         logger.debug("Dispatching command with name : {Contactscontroller, intialise done}");
+        session = HibernateUtil.getSessionFactory().openSession();
     }
 
     @RequestMapping(value = "{contactIdentifier}/phonenumbers/{identifier}/delete", method = RequestMethod.POST)
     public String formDelete(@PathVariable Long contactIdentifier, @ModelAttribute("phoneNumber") @Valid PhoneNumberEntry phoneNumber,
                              BindingResult bindingResult) {
+        
+        
         if (!bindingResult.hasErrors()) {
-            Contact contact = contactsRepository.findOne(contactIdentifier);
-            phoneNumberRepository.delete(phoneNumber);
-            contact.getPhoneNumberEntries().remove(phoneNumber);
-            contactsRepository.save(contact);
-
+            Transaction tx = null;
+            int pre_count;
+            Contact contact;
+            try {
+                tx = session.beginTransaction();
+                contact = contactsRepository.findOne(contactIdentifier);
+                pre_count = contact.getPhoneNumberEntries().size();
+                phoneNumber.setContact(null);
+                contact.getPhoneNumberEntries().remove(phoneNumber);
+                session.delete(phoneNumber);
+                tx.commit();
+            } catch (HibernateException he) {
+                if (tx != null) tx.rollback();
+                throw he;
+            } finally {
+                session.close();
+            }
+//            assert(pre_count > contact.getPhoneNumberEntries().size());
             return "redirect:/contacts/" + contactIdentifier;
         }
 
@@ -93,10 +117,20 @@ public class PhoneNumberController {
         if (bindingResult.hasErrors()) {
             return "phonenumbers/new";
         }
-        Contact contact = contactsRepository.findOne(contactIdentifier);
-        phoneNumber.setContact(contact);
-        contact.getPhoneNumberEntries().add(phoneNumber);
-        phoneNumberRepository.save(phoneNumber);
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Contact contact = contactsRepository.findOne(contactIdentifier);
+            phoneNumber.setContact(contact);
+            contact.getPhoneNumberEntries().add(phoneNumber);
+            session.save(phoneNumber);
+            tx.commit();
+        } catch (HibernateException he) {
+            if (tx != null) tx.rollback();
+            throw he;
+        } finally {
+            session.close();
+        }
 
         return "redirect:/contacts/" + contactIdentifier;
     }

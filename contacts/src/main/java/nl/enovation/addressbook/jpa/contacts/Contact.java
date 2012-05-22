@@ -31,6 +31,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cascade;
+
 @Entity
 @Table(name = "contact")
 public class Contact {
@@ -53,7 +55,7 @@ public class Contact {
 
     private String department;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<PhoneNumberEntry> getPhoneNumberEntries() {
         return phoneNumberEntries;
     }

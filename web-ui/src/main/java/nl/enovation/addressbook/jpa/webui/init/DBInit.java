@@ -22,7 +22,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
+import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
+import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
+import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
+import nl.enovation.addressbook.jpa.repositories.ContactRepository;
+import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -51,32 +57,39 @@ public class DBInit {
                                      "561-9262 Iaculis Avenue" };
 
     public static void createItems() {
-
-        EntityManager em = Persistence.createEntityManagerFactory("addressbook").createEntityManager();
-
-        em.getTransaction().begin();
+        String group;
+        PhoneNumberEntry phoneNumber;
         Random r = new Random(0);
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.getTransaction().begin();
         for (String g : groupsNames) {
-            String group;
             group = g;
 
             int amount = r.nextInt(15) + 1;
             for (int i = 0; i < amount; i++) {
-                Contact p = new Contact();
-                p.setFirstName(fnames[r.nextInt(fnames.length)]);
-                p.setLastName(lnames[r.nextInt(lnames.length)]);
-                p.setCity(cities[r.nextInt(cities.length)]);
-//                p.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
+                Contact c = new Contact();
+                c.setFirstName(fnames[r.nextInt(fnames.length)]);
+                c.setLastName(lnames[r.nextInt(lnames.length)]);
+                c.setCity(cities[r.nextInt(cities.length)]);
                 int n = r.nextInt(100000);
                 if (n < 10000) {
                     n += 10000;
                 }
-                p.setZipCode("" + n);
-                p.setStreet(streets[r.nextInt(streets.length)]);
-                p.setDepartment(group);
-                em.persist(p);
+                c.setZipCode("" + n);
+                c.setStreet(streets[r.nextInt(streets.length)]);
+                c.setDepartment(group);
+                session.save(c);
+                
+                phoneNumber = new PhoneNumberEntry();
+                phoneNumber.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
+                phoneNumber.setPhoneNumberType(PhoneNumberType.FAX);
+                phoneNumber.setContact(c);
+                c.getPhoneNumberEntries().add(phoneNumber);
+                session.save(phoneNumber);
             }
         }
-        em.getTransaction().commit();
+        session.getTransaction().commit();
+        session.disconnect();
     }
 }

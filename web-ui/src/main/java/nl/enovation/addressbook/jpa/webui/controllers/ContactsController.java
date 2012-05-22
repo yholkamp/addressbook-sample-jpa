@@ -95,7 +95,7 @@ public class ContactsController {
         }
         contactsFactory.save(contact);
         logger.debug("Received request for command : {editContact(contact)}");
-        return "redirect:/contacts";
+        return "redirect:/contacts/"+contact.getIdentifier();
     }
 
     @RequestMapping(value = "new", method = RequestMethod.GET)

@@ -8,18 +8,21 @@ import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class PhoneNumberEntryRepository {
 
 //    private Session session;
+    private SessionFactory sessionFactory;
 
     public PhoneNumberEntryRepository() {
-//        session = HibernateUtil.getSessionFactory().openSession();
+        sessionFactory = HibernateUtil.getSessionFactory();
     }
 
     /**
@@ -30,14 +33,8 @@ public class PhoneNumberEntryRepository {
      */
     public PhoneNumberEntry save(PhoneNumberEntry phoneNumberEntry) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if (phoneNumberEntry.getIdentifier() == null) {
-            session.save(phoneNumberEntry);
-            session.flush();
-            return phoneNumberEntry;
-        } else {
-            session.save(phoneNumberEntry);;
-            return phoneNumberEntry;
-        }
+        session.save(phoneNumberEntry);
+        return phoneNumberEntry;
     }
 
     /**
@@ -48,7 +45,7 @@ public class PhoneNumberEntryRepository {
      */
     public PhoneNumberEntry findOne(Long identifier) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        return (PhoneNumberEntry) session.load(PhoneNumberEntry.class, identifier);
+        return (PhoneNumberEntry) session.get(PhoneNumberEntry.class, identifier);
     }
 
     /**
@@ -83,9 +80,6 @@ public class PhoneNumberEntryRepository {
      */
     public void delete(PhoneNumberEntry phoneNumberEntry) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-//        session.beginTransaction();
-        phoneNumberEntry = (PhoneNumberEntry) session.merge(phoneNumberEntry);
         session.delete(phoneNumberEntry);
-//        session.getTransaction().commit();
     }
 }

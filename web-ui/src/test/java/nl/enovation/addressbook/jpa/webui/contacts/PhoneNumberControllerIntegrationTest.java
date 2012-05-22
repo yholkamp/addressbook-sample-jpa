@@ -15,6 +15,9 @@ import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
 import nl.enovation.addressbook.jpa.webui.controllers.PhoneNumberController;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,6 +41,8 @@ public class PhoneNumberControllerIntegrationTest {
     @Mock
     private Model model;
 
+    private Session session;
+
     private Contact createContact() {
         Contact contact = new Contact();
         contact.setFirstName("Foo");
@@ -54,6 +59,8 @@ public class PhoneNumberControllerIntegrationTest {
 
     @Before
     public void setUp() {
+        session = HibernateUtil.getSessionFactory().openSession();
+
         MockitoAnnotations.initMocks(this);
         Mockito.when(mockBindingResult.hasErrors()).thenReturn(false);
 
@@ -62,87 +69,119 @@ public class PhoneNumberControllerIntegrationTest {
         phoneNumberEntryRepository = new PhoneNumberEntryRepository();
     }
 
-//    @Test
-//    public void testDeleteForm() {
-//        HibernateUtil.getSessionFactory().openSession().flush();
-//        // Set up a contact
-//        Contact contact = createContact();
-//        contactRepository.save(contact);
-//        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
-//
-//        // Set up a phone number for the contact
-//        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-//        phoneNumber.setContact(contact);
-//        contact.getPhoneNumberEntries().add(phoneNumber);
-//        phoneNumberEntryRepository.save(phoneNumber);
-//        contactRepository.save(contact);
-//
-//        String view = controller.formDelete(contact.getIdentifier(), phoneNumber.getIdentifier(), model);
-//
-//        // Check that we're shown the confirmation page
-//        assertEquals("phonenumbers/delete", view);
-//    }
-//
-//    @Test
-//    public void testDeletePhoneNumber() {
-//        // Set up a contact
-//        Contact contact = createContact();
-//        contactRepository.save(contact);
-//        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
-//
-//        // Set up a phone number for the contact
-//        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-//        phoneNumber.setContact(contact);
-//        contact.getPhoneNumberEntries().add(phoneNumber);
-//        phoneNumberEntryRepository.save(phoneNumber);
-//        //contactRepository.save(contact);
-//        
-//        assertNotNull("PhoneNumber should have an identifier", phoneNumber.getIdentifier());
-//        
-//        PhoneNumberEntry phoneNumberEntryFromDb = phoneNumberEntryRepository.findOne(phoneNumber.getIdentifier());
-//        assertNotNull("PhoneNumber should be recoverable from DB", phoneNumberEntryFromDb);
-//        assertNotNull("Should have a contact when fetched from DB", phoneNumberEntryFromDb.getContact());
-//
-//        assertEquals("Contact should have the new phoneNumber set in the database", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
-//        
-//        String view = controller.formDelete(contact.getIdentifier(), phoneNumber, mockBindingResult);
-//
-//        assertEquals("PhoneNumber should have been added", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
-//        // Check that we returned back to the contact list
-//        assertEquals("redirect:/contacts/" + contact.getIdentifier(), view);
-//
-//        Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
-//        assertEquals("PhoneNumber should have been removed", 0, contactFromDb.getPhoneNumberEntries().size());
-//    }
-//
-//    @Test
-//    public void testNewPhoneNumberForm() {
-//        String view = controller.formNew(42L, model);
-//
-//        // Check that we'reback to the original form
-//        assertEquals("phonenumbers/new", view);
-//    }
-//
-//    @Test
-//    public void testNewPhoneNumber_failure() {
-//        Mockito.when(mockBindingResult.hasErrors()).thenReturn(true);
-//        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-//
-//        String view = controller.formNewSubmit(42L, phoneNumber, mockBindingResult);
-//
-//        // Check that we'reback to the original form
-//        assertEquals("phonenumbers/new", view);
-//    }
+    @Test
+    public void testDeleteForm() {
+        PhoneNumberEntry phoneNumber;
+        Contact contact;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            // Set up a contact
+            contact = createContact();
+            session.save(contact);
+
+            // Set up a phone number for the contact
+            phoneNumber = createPhoneNumberEntry();
+            phoneNumber.setContact(contact);
+            session.persist(phoneNumber);
+            contact.getPhoneNumberEntries().add(phoneNumber);
+            tx.commit();
+        } catch (HibernateException he) {
+            if (tx != null) tx.rollback();
+            throw he;
+        } finally {
+            session.close();
+        }
+
+        assertNotNull("phoneNumber should have an identifier", phoneNumber.getIdentifier());
+
+        String view = controller.formDelete(contact.getIdentifier(), phoneNumber.getIdentifier(), model);
+
+        // Check that we're shown the confirmation page
+        assertEquals("phonenumbers/delete", view);
+    }
+
+    @Test
+    public void testDeletePhoneNumber() {
+        PhoneNumberEntry phoneNumber;
+        Contact contact;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            // Set up a contact
+            contact = createContact();
+            session.save(contact);
+
+            // Set up a phone number for the contact
+            phoneNumber = createPhoneNumberEntry();
+            phoneNumber.setContact(contact);
+            session.persist(phoneNumber);
+            contact.getPhoneNumberEntries().add(phoneNumber);
+            tx.commit();
+        } catch (HibernateException he) {
+            if (tx != null) tx.rollback();
+            throw he;
+        } finally {
+            session.close();
+        }
+
+        assertNotNull("PhoneNumber should have an identifier", phoneNumber.getIdentifier());
+
+        PhoneNumberEntry phoneNumberEntryFromDb = phoneNumberEntryRepository.findOne(phoneNumber.getIdentifier());
+        assertNotNull("PhoneNumber should be recoverable from DB", phoneNumberEntryFromDb);
+        assertNotNull("Should have a contact when fetched from DB", phoneNumberEntryFromDb.getContact());
+
+        assertEquals("Contact should have the new phoneNumber set in the database", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
+
+        String view = controller.formDelete(contact.getIdentifier(), phoneNumber, mockBindingResult);
+
+        assertEquals("PhoneNumber should have been added", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
+        // Check that we returned back to the contact list
+        assertEquals("redirect:/contacts/" + contact.getIdentifier(), view);
+
+//        assertEquals("PhoneNumber should have been removed", 0, contact.getPhoneNumberEntries().size());
+    }
+
+    @Test
+    public void testNewPhoneNumberForm() {
+        String view = controller.formNew(42L, model);
+
+        // Check that we'reback to the original form
+        assertEquals("phonenumbers/new", view);
+    }
+
+    @Test
+    public void testNewPhoneNumber_failure() {
+        Mockito.when(mockBindingResult.hasErrors()).thenReturn(true);
+        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
+
+        String view = controller.formNewSubmit(42L, phoneNumber, mockBindingResult);
+
+        // Check that we'reback to the original form
+        assertEquals("phonenumbers/new", view);
+    }
 
     @Test
     public void testNewPhoneNumber_success() {
-        Contact contact = createContact();
-        contactRepository.save(contact);
-        assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));
-
-        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
-        String view = controller.formNewSubmit(contact.getIdentifier(), phoneNumber, mockBindingResult);
+        Contact contact;
+        Transaction tx = null;
+        String view;
+        try {
+            tx = session.beginTransaction();
+            contact = createContact();
+            session.save(contact);
+            tx.commit();
+        } catch (HibernateException he) {
+            if (tx != null) tx.rollback();
+            throw he;
+        } finally {
+            session.close();
+        }
         
+        PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
+        view = controller.formNewSubmit(contact.getIdentifier(), phoneNumber, mockBindingResult);
+//        assertEquals("Contact should be retrievable from repository", contact.hashCode(), contactRepository.findOne(contact.getIdentifier()).hashCode());
+
         int phoneNumbers = contact.getPhoneNumberEntries().size();
 
         // Check that we're back to the overview
@@ -150,7 +189,7 @@ public class PhoneNumberControllerIntegrationTest {
 
         Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
         assertNotNull("Should be able to find our contact in the db", contactFromDb);
-        assertEquals("PhoneNumber should have been added in the db", phoneNumbers, contactFromDb.getPhoneNumberEntries().size());
+        assertEquals("PhoneNumber should have been added in the db", 1, contactFromDb.getPhoneNumberEntries().size());
     }
 
 }

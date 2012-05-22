@@ -15,13 +15,13 @@ public class ContactRepository {
     public ContactRepository() {
         session = HibernateUtil.getSessionFactory().openSession();
     }
-    
+
     /**
      * Updates the Contact in the database with the parameter Contact.
      * 
      * @param contact
      *            Contact that is changed by user.
-     */ 
+     */
     public Contact save(Contact contact) {
         if (contact.getIdentifier() == null) {
             session.getTransaction().begin();
@@ -34,7 +34,7 @@ public class ContactRepository {
     }
 
     public Contact findOne(Long identifier) {
-        return (Contact) session.load(Contact.class, identifier);
+        return (Contact) session.get(Contact.class, identifier);
     }
 
     /**
@@ -84,5 +84,12 @@ public class ContactRepository {
     public List<Contact> findByName(String value) {
         Query jpqlQuery = session.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
         return jpqlQuery.setParameter("name", "%" + value + "%").list();
+    }
+
+    /**
+     * Flushes any changes made in the current session.
+     */
+    public void flush() {
+        session.flush();
     }
 }
