@@ -52,9 +52,6 @@ public class PhoneNumberEntry {
 
     public void setContact(Contact contact) {
         this.contact = contact;
-//        if(!contact.getPhoneNumberEntries().contains(this)) {
-//            contact.addPhoneNumberEntry(this);
-//        }
     }
 
     public void setIdentifier(Long identifier) {

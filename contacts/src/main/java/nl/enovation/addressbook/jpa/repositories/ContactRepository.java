@@ -20,7 +20,7 @@ public class ContactRepository {
     
     private final static Logger logger = LoggerFactory.getLogger(ContactRepository.class);
 
-    @Autowired
+//    @Autowired
     private SessionFactory sessionFactory;
 
     /**
@@ -109,10 +109,8 @@ public class ContactRepository {
      * 
      * @param sessionFactory
      */
+    @Required
     public void setSessionFactory(SessionFactory sessionFactory) {
-        logger.debug("setSessionFactory has ran");
-        logger.debug("sessionFactory is {}", sessionFactory);
-        assert(sessionFactory != null);
         this.sessionFactory = sessionFactory;
     }
     

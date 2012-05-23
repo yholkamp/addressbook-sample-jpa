@@ -28,6 +28,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DBInit {
+    
+    private static PhoneNumberEntryRepository phoneNumberEntryRepository;
+    private static ContactRepository contactRepository;
+
+    public void setPhoneNumberEntryRepository(PhoneNumberEntryRepository phoneNumberEntryRepository) {
+        this.phoneNumberEntryRepository = phoneNumberEntryRepository;
+    }
+
+    public void setContactRepository(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
 
     final static String[] groupsNames = { "Corporate Development", "Human Resources", "Legal", "Environment", "Quality Assurance", "Research and Development",
                                          "Production", "Sales", "Marketing" };
@@ -55,8 +66,6 @@ public class DBInit {
         String group;
         PhoneNumberEntry phoneNumber;
         Random r = new Random(0);
-        PhoneNumberEntryRepository phoneNumberEntryRepository = new PhoneNumberEntryRepository();
-        ContactRepository contactRepository = new ContactRepository();
 
         for (String g : groupsNames) {
             group = g;

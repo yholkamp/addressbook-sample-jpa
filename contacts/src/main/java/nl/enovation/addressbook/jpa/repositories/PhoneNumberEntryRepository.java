@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PhoneNumberEntryRepository {
 
 //    private Session session;
-    @Autowired
+//    @Autowired
     private SessionFactory sessionFactory;
 
     /**

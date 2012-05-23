@@ -23,7 +23,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-    <context:component-scan base-package="nl.enovation.addressbook.jpa.webui"/>
+    <context:component-scan base-package="nl.enovation.addressbook.jpa.contacts"/>
 
     <mvc:annotation-driven validator="validator"/>
 
@@ -42,6 +42,8 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
+    
+    <import resource="classpath:META-INF/spring/applicationContext.xml"/>
 <!-- 
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
