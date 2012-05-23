@@ -1,13 +1,10 @@
 package nl.enovation.addressbook.jpa.webui.controllers;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 import nl.enovation.addressbook.jpa.webui.controllers.ContactsController;
 
@@ -52,9 +49,6 @@ public class ContactsControllerIntegrationTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         Mockito.when(mockBindingResult.hasErrors()).thenReturn(false);
-
-        // contactsFactory = new ContactRepository();
-//        controller = new ContactsController();
     }
 
     @Test
@@ -75,8 +69,6 @@ public class ContactsControllerIntegrationTest {
     public void testDeleteCommand_success() {
         Contact contact = createContact();
         contactRepository.save(contact);
-//        Contact contact = contactRepository.findAll().get(0);
-//        contactRepository.getSessionFactory().getCurrentSession().flush();
         assertNotNull("Contact should receive an ID", contact.getIdentifier());
 
         assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));

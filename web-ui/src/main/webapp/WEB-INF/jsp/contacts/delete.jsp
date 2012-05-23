@@ -14,7 +14,5 @@
 <form:form commandName="contact">
     <form:errors path="*" cssClass="errorBox"/>
     <form:hidden path="identifier"/>
-    <form:hidden path="phoneNumber"/>
-    <form:hidden path="phoneNumberType"/>
     <input type="submit" name="submit" value="Delete"/>
 </form:form>

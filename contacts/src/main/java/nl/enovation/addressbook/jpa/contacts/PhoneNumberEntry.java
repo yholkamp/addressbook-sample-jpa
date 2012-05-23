@@ -1,8 +1,5 @@
 package nl.enovation.addressbook.jpa.contacts;
 
-import java.util.ArrayList;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
