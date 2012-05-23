@@ -79,11 +79,8 @@ public class ContactRepository {
      *         The deleted contact merged with any changes in the database.
      */
     public Contact delete(Contact contact) {
-        this.sessionFactory.getCurrentSession().getTransaction().begin();
-        Contact mergedContact = (Contact) this.sessionFactory.getCurrentSession().merge(contact);
-        this.sessionFactory.getCurrentSession().delete(mergedContact);
-        this.sessionFactory.getCurrentSession().getTransaction().commit();
-        return mergedContact;
+        this.sessionFactory.getCurrentSession().delete(contact);
+        return contact;
     }
 
     /**
@@ -107,11 +104,19 @@ public class ContactRepository {
         this.sessionFactory.getCurrentSession().flush();
     }
 
-    @Required
+    /**
+     * Sets the sessionFactory to the provided object.
+     * 
+     * @param sessionFactory
+     */
     public void setSessionFactory(SessionFactory sessionFactory) {
         logger.debug("setSessionFactory has ran");
         logger.debug("sessionFactory is {}", sessionFactory);
         assert(sessionFactory != null);
         this.sessionFactory = sessionFactory;
+    }
+    
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

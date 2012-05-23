@@ -73,9 +73,10 @@ public class ContactsControllerIntegrationTest {
 
     @Test
     public void testDeleteCommand_success() {
-        Contact contact = createContact();
-        contactRepository.save(contact);
-        contactRepository.flush();
+//        Contact contact = createContact();
+//        contactRepository.save(contact);
+        Contact contact = contactRepository.findAll().get(0);
+//        contactRepository.getSessionFactory().getCurrentSession().flush();
         assertNotNull("Contact should receive an ID", contact.getIdentifier());
 
         assertEquals("Contact should be retrievable from repository", contact, contactRepository.findOne(contact.getIdentifier()));

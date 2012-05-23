@@ -29,7 +29,7 @@ public class PhoneNumberEntry {
 
     private Contact contact;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @Cascade( { PERSIST, MERGE, REFRESH, SAVE_UPDATE, REPLICATE, LOCK, DETACH })
     @JoinColumn(name = "CONTACT_ID", nullable = false)
     public Contact getContact() {
