@@ -42,7 +42,7 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
-
+<!-- 
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
@@ -52,5 +52,5 @@
             </list>
         </property>
     </bean>
-
+ -->
 </beans>

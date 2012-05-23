@@ -55,7 +55,7 @@ public class Contact {
 
     private String department;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<PhoneNumberEntry> getPhoneNumberEntries() {
         return phoneNumberEntries;
     }

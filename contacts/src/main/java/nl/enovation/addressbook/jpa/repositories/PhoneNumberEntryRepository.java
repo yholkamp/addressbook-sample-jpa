@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 
@@ -15,15 +14,18 @@ import javax.persistence.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@Repository
 public class PhoneNumberEntryRepository {
 
 //    private Session session;
+    @Autowired
     private SessionFactory sessionFactory;
-
-    public PhoneNumberEntryRepository() {
-        sessionFactory = HibernateUtil.getSessionFactory();
-    }
 
     /**
      * Updates the PhoneNumberEntry in the database with the parameter PhoneNumberEntry.
@@ -32,8 +34,7 @@ public class PhoneNumberEntryRepository {
      *            PhoneNumberEntry that is changed by user.
      */
     public PhoneNumberEntry save(PhoneNumberEntry phoneNumberEntry) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.save(phoneNumberEntry);
+        this.sessionFactory.getCurrentSession().save(phoneNumberEntry);
         return phoneNumberEntry;
     }
 
@@ -44,8 +45,7 @@ public class PhoneNumberEntryRepository {
      * @return phoneNumberEntry
      */
     public PhoneNumberEntry findOne(Long identifier) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return (PhoneNumberEntry) session.get(PhoneNumberEntry.class, identifier);
+        return (PhoneNumberEntry) this.sessionFactory.getCurrentSession().get(PhoneNumberEntry.class, identifier);
     }
 
     /**
@@ -56,8 +56,7 @@ public class PhoneNumberEntryRepository {
      */
     @SuppressWarnings("unchecked")
     public List<PhoneNumberEntry> findAll() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.createQuery("SELECT * FROM contact").list();
+        return this.sessionFactory.getCurrentSession().createQuery("SELECT * FROM contact").list();
     }
 
     /**
@@ -66,8 +65,7 @@ public class PhoneNumberEntryRepository {
      * @return Boolean is true if the database is empty.
      */
     public boolean isEmpty() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.createQuery("SELECT c FROM PhoneNumberEntry c").list().size() == 0;
+        return this.sessionFactory.getCurrentSession().createQuery("SELECT c FROM PhoneNumberEntry c").list().size() == 0;
     }
 
     /**
@@ -79,7 +77,11 @@ public class PhoneNumberEntryRepository {
      *         The deleted contact merged with any changes in the database.
      */
     public void delete(PhoneNumberEntry phoneNumberEntry) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.delete(phoneNumberEntry);
+        this.sessionFactory.getCurrentSession().delete(phoneNumberEntry);
+    }
+
+    @Required
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

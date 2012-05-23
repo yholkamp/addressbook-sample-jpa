@@ -4,17 +4,24 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 
+@Transactional
+@Repository
 public class ContactRepository {
+    
+    private final static Logger logger = LoggerFactory.getLogger(ContactRepository.class);
 
-    private Session session;
-
-    public ContactRepository() {
-        session = HibernateUtil.getSessionFactory().openSession();
-    }
+    @Autowired
+    private SessionFactory sessionFactory;
 
     /**
      * Updates the Contact in the database with the parameter Contact.
@@ -23,17 +30,23 @@ public class ContactRepository {
      *            Contact that is changed by user.
      */
     public Contact save(Contact contact) {
+        Session session = this.sessionFactory.getCurrentSession();
         if (contact.getIdentifier() == null) {
-            session.getTransaction().begin();
-            session.persist(contact);
-            session.getTransaction().commit();
+            session.save(contact);
             return contact;
         } else {
             return (Contact) session.merge(contact);
         }
     }
 
+    /**
+     * Retrieves one specific contact from the database using its unique identifier.
+     * 
+     * @return contact
+     *              Contact that was found in the database.
+     */
     public Contact findOne(Long identifier) {
+        Session session = this.sessionFactory.getCurrentSession();
         return (Contact) session.get(Contact.class, identifier);
     }
 
@@ -45,7 +58,7 @@ public class ContactRepository {
      */
     @SuppressWarnings("unchecked")
     public List<Contact> findAll() {
-        return session.createQuery("SELECT c FROM Contact c").list();
+        return this.sessionFactory.getCurrentSession().createQuery("SELECT c FROM Contact c").list();
     }
 
     /**
@@ -54,7 +67,7 @@ public class ContactRepository {
      * @return Boolean is true if the database is empty.
      */
     public boolean isEmpty() {
-        return session.createQuery("SELECT c FROM Contact c").list().isEmpty();
+        return this.sessionFactory.getCurrentSession().createQuery("SELECT c FROM Contact c").list().isEmpty();
     }
 
     /**
@@ -66,10 +79,10 @@ public class ContactRepository {
      *         The deleted contact merged with any changes in the database.
      */
     public Contact delete(Contact contact) {
-        session.getTransaction().begin();
-        Contact mergedContact = (Contact) session.merge(contact);
-        session.delete(mergedContact);
-        session.getTransaction().commit();
+        this.sessionFactory.getCurrentSession().getTransaction().begin();
+        Contact mergedContact = (Contact) this.sessionFactory.getCurrentSession().merge(contact);
+        this.sessionFactory.getCurrentSession().delete(mergedContact);
+        this.sessionFactory.getCurrentSession().getTransaction().commit();
         return mergedContact;
     }
 
@@ -82,14 +95,23 @@ public class ContactRepository {
      */
     @SuppressWarnings("unchecked")
     public List<Contact> findByName(String value) {
-        Query jpqlQuery = session.createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
+        Query jpqlQuery = this.sessionFactory.getCurrentSession()
+                                             .createQuery("Select cnt from Contact cnt where cnt.firstName like :name OR cnt.lastName like :name");
         return jpqlQuery.setParameter("name", "%" + value + "%").list();
     }
 
     /**
-     * Flushes any changes made in the current session.
+     * Flushes any changes made in the current this.sessionFactory.getCurrentSession().
      */
     public void flush() {
-        session.flush();
+        this.sessionFactory.getCurrentSession().flush();
+    }
+
+    @Required
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        logger.debug("setSessionFactory has ran");
+        logger.debug("sessionFactory is {}", sessionFactory);
+        assert(sessionFactory != null);
+        this.sessionFactory = sessionFactory;
     }
 }

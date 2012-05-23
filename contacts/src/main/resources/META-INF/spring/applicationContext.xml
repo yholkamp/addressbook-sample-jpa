@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    	http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<context:annotation-config />
+
+	<tx:annotation-driven />
+
+	<beans>
+		<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy" 
+			destroy-method="close"> <property name="driverClass" value="org.h2.Driver" 
+			/> <property name="url" value="jdbc:h2:jpacontaineraddressbookh2db" /> </bean> -->
+
+		<!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+			<property name="ignoreUnresolvablePlaceholders" value="true" /> <property 
+			name="locations"> <list> <value>classpath:hibernate_jdbc.properties</value> 
+			</list> </property> </bean> -->
+
+		<bean id="dataSource"
+			class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+			<constructor-arg>
+				<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+					<property name="driverClass" value="org.h2.Driver" />
+					<property name="url"
+						value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=Oracle;TRACE_LEVEL_SYSTEM_OUT=2" />
+				</bean>
+			</constructor-arg>
+		</bean>
+
+		<bean id="mySessionFactory"
+			class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="dataSource" ref="dataSource" />
+			<property name="configLocation" value="hibernate.cfg.xml" />
+
+			<property name="hibernateProperties">
+				<value>
+					hibernate.dialect=org.hibernate.dialect.H2Dialect
+					hibernate.show_sql=true
+					hibernate.hbm2ddl.auto=create-drop
+				</value>
+			</property>
+		</bean>
+
+		<bean id="transactionManager"
+			class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+			<property name="sessionFactory" ref="mySessionFactory" />
+		</bean>
+
+		<bean id="contactRepository"
+			class="nl.enovation.addressbook.jpa.repositories.ContactRepository">
+			<property name="sessionFactory" ref="mySessionFactory" />
+		</bean>
+
+		<bean id="phoneNumberEntryRepository"
+			class="nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository">
+			<property name="sessionFactory" ref="mySessionFactory" />
+		</bean>
+		
+		<bean class="nl.enovation.addressbook.jpa.webui.controllers.PhoneNumberController"></bean>
+		<bean class="nl.enovation.addressbook.jpa.webui.controllers.ContactsController"></bean>
+	</beans>
+</beans>

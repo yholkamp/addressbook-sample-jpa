@@ -18,17 +18,12 @@ package nl.enovation.addressbook.jpa.webui.init;
 
 import java.util.Random;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
 import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.HibernateUtil;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
 import nl.enovation.addressbook.jpa.repositories.ContactRepository;
 import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -60,9 +55,9 @@ public class DBInit {
         String group;
         PhoneNumberEntry phoneNumber;
         Random r = new Random(0);
-        
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.getTransaction().begin();
+        PhoneNumberEntryRepository phoneNumberEntryRepository = new PhoneNumberEntryRepository();
+        ContactRepository contactRepository = new ContactRepository();
+
         for (String g : groupsNames) {
             group = g;
 
@@ -79,17 +74,15 @@ public class DBInit {
                 c.setZipCode("" + n);
                 c.setStreet(streets[r.nextInt(streets.length)]);
                 c.setDepartment(group);
-                session.save(c);
-                
+                contactRepository.save(c);
+
                 phoneNumber = new PhoneNumberEntry();
                 phoneNumber.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
                 phoneNumber.setPhoneNumberType(PhoneNumberType.FAX);
                 phoneNumber.setContact(c);
                 c.getPhoneNumberEntries().add(phoneNumber);
-                session.save(phoneNumber);
+                phoneNumberEntryRepository.save(phoneNumber);
             }
         }
-        session.getTransaction().commit();
-        session.disconnect();
     }
 }
