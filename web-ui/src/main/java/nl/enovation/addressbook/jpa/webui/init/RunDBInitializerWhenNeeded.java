@@ -46,9 +46,9 @@ public class RunDBInitializerWhenNeeded implements ApplicationListener<ContextRe
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-//        if (contactRepository.isEmpty()) {
-//            DBInit.createItems();
-//            logger.info("The database has been created and refreshed with some data.");
-//        }
+        if (contactRepository.isEmpty()) {
+            DBInit.createItems();
+            logger.info("The database has been created and refreshed with some data.");
+        }
     }
 }

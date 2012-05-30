@@ -21,7 +21,7 @@
 
     <!-- Main hero unit for a primary marketing message or call to action -->
     <div class="hero-unit">
-        <h1>Address Book</h1>
+        <h1>Address Book JPA</h1>
 
         <p>
             A simple sample sandbox application utilizing either a standard JPA backend or CQRS/ES with a MongoDB
