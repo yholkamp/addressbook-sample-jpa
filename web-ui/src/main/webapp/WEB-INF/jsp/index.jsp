@@ -46,7 +46,7 @@
                 <a class="btn" href="https://github.com/nextpulse/addressbook-sample-jpa">View JPA-version &raquo;</a>
             </p>
         </div>
-        <div class="span4">
+        <div class="span6">
             <h2>Technologies used</h2>
 
             <p>

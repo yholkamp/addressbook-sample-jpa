@@ -104,7 +104,7 @@ public class ContactsController {
             return "contacts/new";
         }
         contactRepository.save(contact);
-        return "redirect:/contacts";
+        return "redirect:/contacts/"+ contact.getIdentifier();
     }
 
     @RequestMapping(method = RequestMethod.GET)

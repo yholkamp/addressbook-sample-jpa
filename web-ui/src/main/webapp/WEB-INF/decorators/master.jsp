@@ -56,14 +56,14 @@
         </div>
         <decorator:getProperty property="page.breadcrumb"/>
         <div class="row">
-            <div class="span14">
+            <div class="span12">
                 <decorator:body/>
             </div>
         </div>
     </div>
 
     <footer class="footer">
-        <p>&copy; Gridshore 2011</p>
+        <p>&copy; Gridshore 2011, ENovation 2012</p>
     </footer>
 
 </div>
