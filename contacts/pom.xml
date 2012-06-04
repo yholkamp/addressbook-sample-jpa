@@ -29,6 +29,13 @@
 			<!-- will come with Hibernate core -->
 		</dependency>
 
+		<!-- Generic -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
 		<!-- Database -->
 		<dependency>
 			<groupId>org.springframework</groupId>

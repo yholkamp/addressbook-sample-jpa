@@ -142,8 +142,8 @@ public class ContactsControllerIntegrationTest {
         Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
         assertEquals(contact.hashCode(), contactFromDb.hashCode());
 
-        // Check that we're back to the overview
-        assertEquals("redirect:/contacts", view);
+        // Check that we're sent to the contact detail page
+        assertEquals("redirect:/contacts/"+contact.getIdentifier(), view);
     }
 
     @Test
