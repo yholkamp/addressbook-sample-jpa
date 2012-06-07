@@ -1,4 +1,4 @@
-package nl.enovation.addressbook.jpa.webui.controllers;
+package nl.enovation.addressbook.jpa.webui.controller;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyList;
