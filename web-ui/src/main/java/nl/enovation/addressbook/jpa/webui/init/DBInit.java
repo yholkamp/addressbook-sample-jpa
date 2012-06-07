@@ -28,30 +28,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DBInit {
-    
+
     private static PhoneNumberEntryRepository phoneNumberEntryRepository;
+
     private static ContactRepository contactRepository;
 
-    public void setPhoneNumberEntryRepository(PhoneNumberEntryRepository phoneNumberEntryRepository) {
-        this.phoneNumberEntryRepository = phoneNumberEntryRepository;
-    }
-
-    public void setContactRepository(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
-
-    final static String[] groupsNames = { "Corporate Development", "Human Resources", "Legal", "Environment", "Quality Assurance", "Research and Development",
+    static final String[] GROUP_NAMES = { "Corporate Development", "Human Resources", "Legal", "Environment", "Quality Assurance", "Research and Development",
                                          "Production", "Sales", "Marketing" };
 
-    final static String[] fnames = { "Peter", "Alice", "Joshua", "Mike", "Olivia", "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene", "Lisa", "Marge" };
+    static final String[] FIRST_NAMES = { "Peter", "Alice", "Joshua", "Mike", "Olivia", "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene", "Lisa",
+                                         "Marge" };
 
-    final static String[] lnames = { "Smith", "Gordon", "Simpson", "Brown", "Clavel", "Simons", "Verne", "Scott", "Allison", "Gates", "Rowling", "Barks",
-                                    "Ross", "Schneider", "Tate" };
+    static final String[] LAST_NAMES = { "Smith", "Gordon", "Simpson", "Brown", "Clavel", "Simons", "Verne", "Scott", "Allison", "Gates", "Rowling", "Barks",
+                                        "Ross", "Schneider", "Tate" };
 
-    final static String cities[] = { "Amsterdam", "Berlin", "Helsinki", "Hong Kong", "London", "Luxemburg", "New York", "Oslo", "Paris", "Rome", "Stockholm",
+    static final String CITIES[] = { "Amsterdam", "Berlin", "Helsinki", "Hong Kong", "London", "Luxemburg", "New York", "Oslo", "Paris", "Rome", "Stockholm",
                                     "Tokyo", "Turku" };
 
-    final static String streets[] = { "4215 Blandit Av.", "452-8121 Sem Ave", "279-4475 Tellus Road", "4062 Libero. Av.", "7081 Pede. Ave", "6800 Aliquet St.",
+    static final String STREETS[] = { "4215 Blandit Av.", "452-8121 Sem Ave", "279-4475 Tellus Road", "4062 Libero. Av.", "7081 Pede. Ave", "6800 Aliquet St.",
                                      "P.O. Box 298, 9401 Mauris St.", "161-7279 Augue Ave", "P.O. Box 496, 1390 Sagittis. Rd.", "448-8295 Mi Avenue",
                                      "6419 Non Av.", "659-2538 Elementum Street", "2205 Quis St.", "252-5213 Tincidunt St.",
                                      "P.O. Box 175, 4049 Adipiscing Rd.", "3217 Nam Ave", "P.O. Box 859, 7661 Auctor St.", "2873 Nonummy Av.",
@@ -67,21 +61,21 @@ public class DBInit {
         PhoneNumberEntry phoneNumber;
         Random r = new Random(0);
 
-        for (String g : groupsNames) {
+        for (String g : GROUP_NAMES) {
             group = g;
 
             int amount = r.nextInt(15) + 1;
             for (int i = 0; i < amount; i++) {
                 Contact c = new Contact();
-                c.setFirstName(fnames[r.nextInt(fnames.length)]);
-                c.setLastName(lnames[r.nextInt(lnames.length)]);
-                c.setCity(cities[r.nextInt(cities.length)]);
+                c.setFirstName(FIRST_NAMES[r.nextInt(FIRST_NAMES.length)]);
+                c.setLastName(LAST_NAMES[r.nextInt(LAST_NAMES.length)]);
+                c.setCity(CITIES[r.nextInt(CITIES.length)]);
                 int n = r.nextInt(100000);
                 if (n < 10000) {
                     n += 10000;
                 }
                 c.setZipCode("" + n);
-                c.setStreet(streets[r.nextInt(streets.length)]);
+                c.setStreet(STREETS[r.nextInt(STREETS.length)]);
                 c.setDepartment(group);
                 contactRepository.save(c);
 
@@ -93,5 +87,13 @@ public class DBInit {
                 phoneNumberEntryRepository.save(phoneNumber);
             }
         }
+    }
+
+    public void setContactRepository(ContactRepository contactRepository) {
+        DBInit.contactRepository = contactRepository;
+    }
+
+    public void setPhoneNumberEntryRepository(PhoneNumberEntryRepository phoneNumberEntryRepository) {
+        DBInit.phoneNumberEntryRepository = phoneNumberEntryRepository;
     }
 }

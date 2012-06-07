@@ -20,11 +20,9 @@ import nl.enovation.addressbook.jpa.repository.ContactRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
 
 /**
  * <p>
@@ -36,19 +34,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RunDBInitializerWhenNeeded implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(RunDBInitializerWhenNeeded.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunDBInitializerWhenNeeded.class);
 
     private ContactRepository contactRepository;
-    
-    public void setContactRepository(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
-    
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (contactRepository.isEmpty()) {
             DBInit.createItems();
-            logger.info("The database has been created and refreshed with some data.");
+            LOGGER.info("The database has been created and refreshed with some data.");
         }
+    }
+
+    public void setContactRepository(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 }
