@@ -40,12 +40,12 @@
 
 		<!-- Repositories -->
 		<bean id="contactRepository"
-			class="nl.enovation.addressbook.jpa.repositories.ContactRepository">
+			class="nl.enovation.addressbook.jpa.repository.ContactRepository">
 			<property name="sessionFactory" ref="mySessionFactory" />
 		</bean>
 
 		<bean id="myPhoneNumberEntryRepository"
-			class="nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository">
+			class="nl.enovation.addressbook.jpa.repository.PhoneNumberEntryRepository">
 			<property name="sessionFactory" ref="mySessionFactory" />
 		</bean>
 
@@ -59,12 +59,12 @@
 			<property name="contactRepository" ref="contactRepository" />
 		</bean>
 		
-		<bean class="nl.enovation.addressbook.jpa.webui.controllers.PhoneNumberController">
+		<bean class="nl.enovation.addressbook.jpa.webui.controller.PhoneNumberController">
 			<property name="phoneNumberEntryRepository" ref="myPhoneNumberEntryRepository" />
 			<property name="contactRepository" ref="contactRepository" />
 		</bean>
 		
-		<bean class="nl.enovation.addressbook.jpa.webui.controllers.ContactsController">
+		<bean class="nl.enovation.addressbook.jpa.webui.controller.ContactsController">
 			<property name="contactRepository" ref="contactRepository" />
 		</bean>
 	</beans>

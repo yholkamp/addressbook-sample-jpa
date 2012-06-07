@@ -16,7 +16,7 @@
 
 package nl.enovation.addressbook.jpa.webui.init;
 
-import nl.enovation.addressbook.jpa.repositories.ContactRepository;
+import nl.enovation.addressbook.jpa.repository.ContactRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

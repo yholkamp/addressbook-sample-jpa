@@ -3,11 +3,12 @@ package nl.enovation.addressbook.jpa.webui.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
-import nl.enovation.addressbook.jpa.repositories.ContactRepository;
-import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
+import nl.enovation.addressbook.jpa.pojo.Contact;
+import nl.enovation.addressbook.jpa.pojo.PhoneNumberEntry;
+import nl.enovation.addressbook.jpa.pojo.PhoneNumberType;
+import nl.enovation.addressbook.jpa.repository.ContactRepository;
+import nl.enovation.addressbook.jpa.repository.PhoneNumberEntryRepository;
+import nl.enovation.addressbook.jpa.webui.controller.PhoneNumberController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+/**
+ * @author Yorick Holkamp
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/spring/applicationContext.xml" })
 public class PhoneNumberControllerIntegrationTest {

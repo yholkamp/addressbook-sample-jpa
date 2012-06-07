@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/dashboard")
 public class DashboardController {
 
-    private final static Logger logger = LoggerFactory.getLogger(DashboardController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String show(Model model) {

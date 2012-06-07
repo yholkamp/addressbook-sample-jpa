@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.repositories.ContactRepository;
-import nl.enovation.addressbook.jpa.webui.controllers.ContactsController;
+import nl.enovation.addressbook.jpa.pojo.Contact;
+import nl.enovation.addressbook.jpa.repository.ContactRepository;
+import nl.enovation.addressbook.jpa.webui.controller.ContactsController;
 
 import org.junit.Before;
 import org.junit.Test;

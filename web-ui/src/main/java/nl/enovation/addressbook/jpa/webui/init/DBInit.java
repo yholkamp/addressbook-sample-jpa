@@ -18,11 +18,11 @@ package nl.enovation.addressbook.jpa.webui.init;
 
 import java.util.Random;
 
-import nl.enovation.addressbook.jpa.contacts.Contact;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberEntry;
-import nl.enovation.addressbook.jpa.contacts.PhoneNumberType;
-import nl.enovation.addressbook.jpa.repositories.ContactRepository;
-import nl.enovation.addressbook.jpa.repositories.PhoneNumberEntryRepository;
+import nl.enovation.addressbook.jpa.pojo.Contact;
+import nl.enovation.addressbook.jpa.pojo.PhoneNumberEntry;
+import nl.enovation.addressbook.jpa.pojo.PhoneNumberType;
+import nl.enovation.addressbook.jpa.repository.ContactRepository;
+import nl.enovation.addressbook.jpa.repository.PhoneNumberEntryRepository;
 
 import org.springframework.stereotype.Component;
 
