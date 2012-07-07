@@ -8,7 +8,6 @@ import nl.enovation.addressbook.jpa.pojo.PhoneNumberEntry;
 import nl.enovation.addressbook.jpa.pojo.PhoneNumberType;
 import nl.enovation.addressbook.jpa.repository.ContactRepository;
 import nl.enovation.addressbook.jpa.repository.PhoneNumberEntryRepository;
-import nl.enovation.addressbook.jpa.webui.controller.PhoneNumberController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +72,7 @@ public class PhoneNumberControllerIntegrationTest {
         PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
         phoneNumber.setContact(contact);
         phoneNumberEntryRepository.save(phoneNumber);
-        contact.getPhoneNumberEntries().add(phoneNumber);
+        contact.getPhoneNumbers().add(phoneNumber);
 
         assertNotNull("phoneNumber should have an identifier", phoneNumber.getIdentifier());
 
@@ -92,7 +91,7 @@ public class PhoneNumberControllerIntegrationTest {
         PhoneNumberEntry phoneNumber = createPhoneNumberEntry();
         phoneNumber.setContact(contact);
         phoneNumberEntryRepository.save(phoneNumber);
-        contact.getPhoneNumberEntries().add(phoneNumber);
+        contact.getPhoneNumbers().add(phoneNumber);
 
         assertNotNull("PhoneNumber should have an identifier", phoneNumber.getIdentifier());
 
@@ -100,14 +99,14 @@ public class PhoneNumberControllerIntegrationTest {
         assertNotNull("PhoneNumber should be recoverable from DB", phoneNumberEntryFromDb);
         assertNotNull("Should have a contact when fetched from DB", phoneNumberEntryFromDb.getContact());
 
-        assertEquals("Contact should have the new phoneNumber set in the database", 1, phoneNumberEntryFromDb.getContact().getPhoneNumberEntries().size());
+        assertEquals("Contact should have the new phoneNumber set in the database", 1, phoneNumberEntryFromDb.getContact().getPhoneNumbers().size());
 
         String view = controller.formDelete(contact.getIdentifier(), phoneNumber, mockBindingResult);
 
         // Check that we returned back to the contact list
         assertEquals("redirect:/contacts/" + contact.getIdentifier(), view);
         //TODO: Check removal properly without Hibernate struggling 
-        //assertEquals("PhoneNumber should have been removed", 0, contact.getPhoneNumberEntries().size());
+        //assertEquals("PhoneNumber should have been removed", 0, contact.getPhoneNumbers().size());
     }
 
     @Test
@@ -143,7 +142,7 @@ public class PhoneNumberControllerIntegrationTest {
 
         Contact contactFromDb = contactRepository.findOne(contact.getIdentifier());
         assertNotNull("Should be able to find our contact in the db", contactFromDb);
-        assertEquals("PhoneNumber should have been added in the db", 1, contactFromDb.getPhoneNumberEntries().size());
+        assertEquals("PhoneNumber should have been added in the db", 1, contactFromDb.getPhoneNumbers().size());
     }
 
 }

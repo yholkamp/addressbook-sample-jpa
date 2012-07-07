@@ -74,7 +74,7 @@ public class PhoneNumberController {
 
         Contact contact = contactRepository.findOne(contactIdentifier);
         phoneNumber.setContact(contact);
-        contact.getPhoneNumberEntries().add(phoneNumber);
+        contact.getPhoneNumbers().add(phoneNumber);
         phoneNumberEntryRepository.save(phoneNumber);
 
         return "redirect:/contacts/" + contactIdentifier;

@@ -112,12 +112,12 @@ public class ContactsController {
         SearchForm value = new SearchForm();
         LOGGER.debug("Received request for command : {getContacts}");
         model.addAttribute("contacts", listContacts);
-        model.addAttribute("searchValue", value);
+        model.addAttribute("searchForm", value);
         return "contacts/list";
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String search(@ModelAttribute("searchValue") SearchForm value, Model model, BindingResult bindingResult) {
+    public String search(@ModelAttribute("searchForm") SearchForm value, Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "contacts/list";
         }

@@ -54,7 +54,7 @@ public class Contact {
 
     private String zipCode;
 
-    private Set<PhoneNumberEntry> phoneNumberEntries = new HashSet<PhoneNumberEntry>(0);
+    private Set<PhoneNumberEntry> phoneNumbers = new HashSet<PhoneNumberEntry>(0);
 
     private String department;
 
@@ -64,7 +64,7 @@ public class Contact {
             final Contact other = (Contact) obj;
             return new EqualsBuilder().append(identifier, other.getIdentifier()).append(firstName, other.getFirstName()).append(lastName, other.getLastName())
                                       .append(street, other.getStreet()).append(city, other.getCity()).append(zipCode, other.getZipCode())
-                                      .append(phoneNumberEntries, other.getPhoneNumberEntries()).append(department, other.getDepartment()).isEquals();
+                                      .append(phoneNumbers, other.getPhoneNumbers()).append(department, other.getDepartment()).isEquals();
         } else {
             return false;
         }
@@ -93,8 +93,8 @@ public class Contact {
     }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
-    public Set<PhoneNumberEntry> getPhoneNumberEntries() {
-        return phoneNumberEntries;
+    public Set<PhoneNumberEntry> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
     public String getStreet() {
@@ -108,7 +108,7 @@ public class Contact {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(identifier).append(firstName).append(lastName).append(street).append(city).append(zipCode)
-                                    .append(phoneNumberEntries.hashCode()).append(department).toHashCode();
+                                    .append(phoneNumbers.hashCode()).append(department).toHashCode();
     }
 
     public void setCity(String city) {
@@ -131,8 +131,8 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public void setPhoneNumberEntries(Set<PhoneNumberEntry> phoneNumbers) {
-        phoneNumberEntries = phoneNumbers;
+    public void setPhoneNumbers(Set<PhoneNumberEntry> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     public void setStreet(String street) {

@@ -83,7 +83,7 @@ public class DBInit {
                 phoneNumber.setPhoneNumber("+358 02 " + r.nextInt(10) + r.nextInt(10) + r.nextInt(10) + r.nextInt(10));
                 phoneNumber.setPhoneNumberType(PhoneNumberType.FAX);
                 phoneNumber.setContact(c);
-                c.getPhoneNumberEntries().add(phoneNumber);
+                c.getPhoneNumbers().add(phoneNumber);
                 phoneNumberEntryRepository.save(phoneNumber);
             }
         }
