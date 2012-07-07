@@ -35,7 +35,7 @@
 	<modules>
 		<module>contacts</module>
 		<module>web-ui</module>
-	</modules>
+    </modules>
 
 	<build>
 		<plugins>

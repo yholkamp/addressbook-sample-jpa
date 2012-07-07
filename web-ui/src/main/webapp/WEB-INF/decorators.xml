@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<decorators defaultdir="/WEB-INF/decorators">
+<decorators defaultdir="/WEB-INF/jsp/decorators">
     <decorator name="master" page="master.jsp">
         <pattern>/*</pattern>
     </decorator>
