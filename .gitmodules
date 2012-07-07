@@ -1,0 +1,3 @@
+[submodule "views"]
+	path = views
+	url = git://github.com/yholkamp/addressbook-sample-mongodb.git
